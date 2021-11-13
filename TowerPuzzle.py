@@ -204,6 +204,10 @@ class TowerPuzzle:
     def remove(self, row, column, number):
         self.field[row][column].remove(number)
 
+    def remove_higher(self, row, column, number):
+        for i in range(number + 1, self.size + 1):
+            self.remove(row, column, i)
+
     def solve_trivial_highest(self):
         for i in range(self.size):
             if self.visibility_left[i] == 1:

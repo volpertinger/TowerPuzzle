@@ -167,6 +167,27 @@ class Test_TowerPuzzle(unittest.TestCase):
         cell.remove(1)
         self.assertEqual(ss.field[1][2], cell)
 
+    def test_remove_higher(self):
+        visibility = [[1, 0, 0], [1, 0, 2], [0, 1, 0], [0, 1, 2]]
+        ss = TowerPuzzle(visibility)
+
+        ss.remove_higher(0, 0, 2)
+        cell = TowerPuzzle.Cell(3)
+        cell.remove(3)
+        self.assertEqual(ss.field[0][0], cell)
+
+        ss.remove_higher(0, 0, 1)
+        cell.remove(2)
+        self.assertEqual(ss.field[0][0], cell)
+
+        ss.remove_higher(1, 1, 3)
+        cell = TowerPuzzle.Cell(3)
+        self.assertEqual(ss.field[1][1], cell)
+
+        ss.remove_higher(2, 0, 1)
+        cell = TowerPuzzle.Cell(3, 1)
+        self.assertEqual(ss.field[2][0], cell)
+
     def test_solve_trivial_highest(self):
         visibility = [[1, 0, 0], [1, 0, 2], [0, 1, 0], [0, 1, 2]]
         ss = TowerPuzzle(visibility)
