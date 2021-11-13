@@ -3,11 +3,18 @@ import sys
 
 class TowerPuzzle:
     class Cell:
-        def __init__(self, size):
+        def __init__(self, size_, number_=None):
             # если в процессе работы программы в этом массиве будет 0, то это так вычеркнут невозможный вариант
             self.array = []
-            for i in range(size):
-                self.array.append(i + 1)
+            if number_ is None:
+                for i in range(size_):
+                    self.array.append(i + 1)
+            else:
+                for i in range(size_):
+                    if i == number_ - 1:
+                        self.array.append(number_)
+                    else:
+                        self.array.append(0)
 
         def __str__(self):
             result = '['
