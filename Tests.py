@@ -5,8 +5,9 @@ import TowerPuzzle
 class Test_TowerPuzzle(unittest.TestCase):
     def test_init(self):
         visibility = [[1, 2, 3], [1, 0, -5], [10, 12, 13], [11, 12, 13]]
-        field = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
         ss = TowerPuzzle.TowerPuzzle(visibility)
+        field = [[ss.Cell(3), ss.Cell(3), ss.Cell(3)], [ss.Cell(3), ss.Cell(3), ss.Cell(3)],
+                 [ss.Cell(3), ss.Cell(3), ss.Cell(3)]]
 
         self.assertEqual(ss.visibility_left, visibility[0])
         self.assertEqual(ss.visibility_up, visibility[1])
