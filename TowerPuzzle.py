@@ -38,6 +38,12 @@ class TowerPuzzle:
             else:
                 return 0
 
+        def __eq__(self, other):
+            try:
+                return self.array == other.array
+            except BaseException:
+                raise RuntimeError("Cell is not equal to other type")
+
         def set(self, number_):
             if (number_ > len(self.array)) or (number_ < 1):
                 raise RuntimeError("Number " + str(number_) + " doesn't exist in cell")
@@ -64,11 +70,12 @@ class TowerPuzzle:
         self.visibility_right = visibility_[2]
         self.visibility_down = visibility_[3]
 
+        self.size = len(visibility_[0])
+
         if field_ is None:
-            self.field = [[0] * len(visibility_[0])] * len(visibility_[0])
+            self.field = [[TowerPuzzle.Cell(len(visibility_[0]))] * len(visibility_[0])] * len(visibility_[0])
         else:
             self.field = field_
-        self.size = len(visibility_[0])
 
     def count_visibility_left(self, index_):
         result = 0
