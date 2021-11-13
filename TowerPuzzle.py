@@ -15,7 +15,9 @@ class TowerPuzzle:
                 if self.array[i] == 0:
                     result += '-'
                 else:
-                    result += self.array[i]
+                    result += str(self.array[i])
+                if i != len(self.array) - 1:
+                    result += ' '
             result += ']'
             return result
 
