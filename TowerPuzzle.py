@@ -57,6 +57,9 @@ class TowerPuzzle:
             except BaseException:
                 raise RuntimeError("Cell is not equal to other type")
 
+        def __bool__(self):
+            return self.array.count(0) == len(self.array) - 1
+
         def set(self, number_):
             if (number_ > len(self.array)) or (number_ < 1):
                 raise RuntimeError("Number " + str(number_) + " doesn't exist in cell")
