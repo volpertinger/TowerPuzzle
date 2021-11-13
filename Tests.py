@@ -2,7 +2,7 @@ import unittest
 import TowerPuzzle
 
 
-class Test_class(unittest.TestCase):
+class Test_TowerPuzzle(unittest.TestCase):
     def test_init(self):
         visibility = [[1, 2, 3], [1, 0, -5], [10, 12, 13], [11, 12, 13]]
         field = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
@@ -77,3 +77,82 @@ class Test_class(unittest.TestCase):
         self.assertEqual(ss.count_unfilled_cells_vertical(0), 2)
         self.assertEqual(ss.count_unfilled_cells_vertical(1), 1)
         self.assertEqual(ss.count_unfilled_cells_vertical(2), 2)
+
+
+class Test_Cell(unittest.TestCase):
+
+    def test_init(self):
+        cell = TowerPuzzle.TowerPuzzle.Cell(9)
+        self.assertEqual(cell.array, [1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+        cell = TowerPuzzle.TowerPuzzle.Cell(1)
+        self.assertEqual(cell.array, [1])
+
+        cell = TowerPuzzle.TowerPuzzle.Cell(20)
+        self.assertEqual(cell.array, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])
+
+        cell = TowerPuzzle.TowerPuzzle.Cell(0)
+        self.assertEqual(cell.array, [])
+
+    def test_remove(self):
+        cell = TowerPuzzle.TowerPuzzle.Cell(9)
+
+        cell.remove(1)
+        self.assertEqual(cell.array, [0, 2, 3, 4, 5, 6, 7, 8, 9])
+
+        cell.remove(1)
+        self.assertEqual(cell.array, [0, 2, 3, 4, 5, 6, 7, 8, 9])
+
+        cell.remove(7)
+        self.assertEqual(cell.array, [0, 2, 3, 4, 5, 6, 0, 8, 9])
+
+    def test_set(self):
+        cell = TowerPuzzle.TowerPuzzle.Cell(9)
+
+        cell.set(4)
+        self.assertEqual(cell.array, [0, 0, 0, 4, 0, 0, 0, 0, 0, ])
+
+        cell.set(6)
+        self.assertEqual(cell.array, [0, 0, 0, 0, 0, 6, 0, 0, 0, ])
+
+        cell.set(6)
+        self.assertEqual(cell.array, [0, 0, 0, 0, 0, 6, 0, 0, 0, ])
+
+    def test_get_not_zeros(self):
+        cell = TowerPuzzle.TowerPuzzle.Cell(9)
+
+        self.assertEqual(cell.get_not_zeros(), [1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+        cell.array = [1, 0, 3, 4, 0, 0, 0, 8, 0]
+        self.assertEqual(cell.get_not_zeros(), [1, 3, 4, 8])
+
+        cell.array = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.assertEqual(cell.get_not_zeros(), [])
+
+    def test_str(self):
+        cell = TowerPuzzle.TowerPuzzle.Cell(9)
+
+        self.assertEqual(str(cell), "[1 2 3 4 5 6 7 8 9]")
+
+        cell.remove(6)
+        self.assertEqual(str(cell), "[1 2 3 4 5 - 7 8 9]")
+
+        cell.remove(5)
+        self.assertEqual(str(cell), "[1 2 3 4 - - 7 8 9]")
+
+        cell.set(6)
+        self.assertEqual(str(cell), "[- - - - - 6 - - -]")
+
+    def test_int(self):
+        cell = TowerPuzzle.TowerPuzzle.Cell(9)
+
+        self.assertEqual(int(cell), 0)
+
+        cell.remove(8)
+        self.assertEqual(int(cell), 0)
+
+        cell.set(3)
+        self.assertEqual(int(cell), 3)
+
+        cell.set(9)
+        self.assertEqual(int(cell), 9)
