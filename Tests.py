@@ -201,6 +201,25 @@ class Test_Cell(unittest.TestCase):
         cell.set(9)
         self.assertEqual(int(cell), 9)
 
+    def test_bool(self):
+        cell = TowerPuzzle.Cell(3)
+        self.assertFalse(cell)
+
+        cell = TowerPuzzle.Cell(0)
+        self.assertFalse(cell)
+
+        cell = TowerPuzzle.Cell(1, 1)
+        self.assertTrue(cell)
+
+        cell = TowerPuzzle.Cell(4)
+        cell.set(4)
+        self.assertTrue(cell)
+
+        cell = TowerPuzzle.Cell(3)
+        cell.remove(1)
+        cell.remove(2)
+        self.assertTrue(cell)
+
 
 class Test_get_field_from_array(unittest.TestCase):
     def test_function(self):
