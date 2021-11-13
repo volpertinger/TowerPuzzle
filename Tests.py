@@ -128,6 +128,24 @@ class Test_TowerPuzzle(unittest.TestCase):
         ss = TowerPuzzle(visibility, field)
         self.assertFalse(ss.is_solved())
 
+    def test_solve_trivial_highest(self):
+        visibility = [[1, 0, 0], [1, 0, 2], [0, 1, 0], [0, 1, 2]]
+        ss = TowerPuzzle(visibility)
+        ss.solve_trivial_highest()
+        field = [[3, 0, 0], [0, 0, 3], [0, 3, 0]]
+        field = get_field_from_array(field)
+        self.assertEqual(ss.field, field)
+
+        visibility = [[2, 1, 2, 2], [2, 2, 1, 2], [2, 2, 1, 2], [2, 1, 2, 2]]
+        ss = TowerPuzzle(visibility)
+        ss.solve_trivial_highest()
+        field = [[0, 0, 4, 0], [4, 0, 0, 0], [0, 0, 0, 4], [0, 4, 0, 0]]
+        field = get_field_from_array(field)
+        self.assertEqual(ss.field, field)
+
+        ss.solve_trivial_highest()
+        self.assertEqual(ss.field, field)
+
 
 class Test_Cell(unittest.TestCase):
 

@@ -87,9 +87,13 @@ class TowerPuzzle:
         self.visibility_down = visibility_[3]
 
         self.size = len(visibility_[0])
-
         if field_ is None:
-            self.field = [[TowerPuzzle.Cell(len(visibility_[0]))] * len(visibility_[0])] * len(visibility_[0])
+            # self.field = [[TowerPuzzle.Cell(len(visibility_[0]))] * len(visibility_[0])] * len(visibility_[0])
+            self.field = []
+            for i in range(len(visibility_[0])):
+                self.field.append([])
+                for j in range(len(visibility_[0])):
+                    self.field[i].append(TowerPuzzle.Cell(len(visibility_[0])))
         else:
             self.field = field_
 
@@ -191,6 +195,22 @@ class TowerPuzzle:
                 return False
 
         return True
+
+    def set(self, row, column, number):
+        if self.field[row][column]:
+            return
+        self.field[row][column].set(number)
+
+    def solve_trivial_highest(self):
+        for i in range(self.size):
+            if self.visibility_left[i] == 1:
+                self.set(i, 0, self.size)
+            if self.visibility_right[i] == 1:
+                self.set(i, self.size - 1, self.size)
+            if self.visibility_up[i] == 1:
+                self.set(0, i, self.size)
+            if self.visibility_down[i] == 1:
+                self.set(self.size - 1, i, self.size)
 
 
 if __name__ == '__main__':
