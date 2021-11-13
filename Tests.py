@@ -94,6 +94,12 @@ class Test_Cell(unittest.TestCase):
         cell = TowerPuzzle.TowerPuzzle.Cell(0)
         self.assertEqual(cell.array, [])
 
+        cell = TowerPuzzle.TowerPuzzle.Cell(0, 4)
+        self.assertEqual(cell.array, [])
+
+        cell = TowerPuzzle.TowerPuzzle.Cell(4, 4)
+        self.assertEqual(cell.array, [0, 0, 0, 4])
+
     def test_remove(self):
         cell = TowerPuzzle.TowerPuzzle.Cell(9)
 
