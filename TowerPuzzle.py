@@ -1,6 +1,19 @@
 import sys
 
 
+# чтобы составлять поля менее громоздко
+def get_field_from_array(array):
+    result = []
+    for i in range(len(array[0])):
+        result.append([])
+        for j in range(len(array[0])):
+            if array[i][j] == 0:
+                result[i].append(TowerPuzzle.Cell(len(array[0])))
+            else:
+                result[i].append(TowerPuzzle.Cell(len(array[0]), array[i][j]))
+    return result
+
+
 class TowerPuzzle:
     class Cell:
         def __init__(self, size_, number_=None):
@@ -76,6 +89,34 @@ class TowerPuzzle:
             self.field = [[TowerPuzzle.Cell(len(visibility_[0]))] * len(visibility_[0])] * len(visibility_[0])
         else:
             self.field = field_
+
+    def __str__(self):
+        # Шапка
+        result = ' ' + '-' * (self.size * self.size + 2) + '\n'
+
+        # visibility up
+        result += ' |'
+        for i in range(self.size):
+            result += str(self.visibility_up[i]).center(self.size, '-')
+        result += ' |\n'
+
+        # field
+        for i in range(self.size):
+            result += str(self.visibility_left[i]) + '|'
+            for j in range(self.size):
+                result += str(self.field[i][j])
+            result += str(self.visibility_right[i]) + '|\n'
+
+        # visibility down
+        result += ' |'
+        for i in range(self.size):
+            result += str(self.visibility_down[i]).center(self.size, '-')
+        result += ' |\n'
+
+        # подвал
+        result += ' ' + '-' * (self.size * self.size + 2) + '\n'
+
+        return result
 
     def count_visibility_left(self, index_):
         result = 0

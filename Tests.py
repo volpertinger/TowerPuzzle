@@ -1,11 +1,12 @@
 import unittest
-import TowerPuzzle
+from TowerPuzzle import TowerPuzzle
+from TowerPuzzle import get_field_from_array
 
 
 class Test_TowerPuzzle(unittest.TestCase):
     def test_init(self):
         visibility = [[1, 2, 3], [1, 0, -5], [10, 12, 13], [11, 12, 13]]
-        ss = TowerPuzzle.TowerPuzzle(visibility)
+        ss = TowerPuzzle(visibility)
         field = [[ss.Cell(3), ss.Cell(3), ss.Cell(3)], [ss.Cell(3), ss.Cell(3), ss.Cell(3)],
                  [ss.Cell(3), ss.Cell(3), ss.Cell(3)]]
 
@@ -18,7 +19,7 @@ class Test_TowerPuzzle(unittest.TestCase):
     def test_count_visibility(self):
         visibility = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
         field = [[1, 2, 3], [2, 3, 1], [3, 1, 2]]
-        ss = TowerPuzzle.TowerPuzzle(visibility)
+        ss = TowerPuzzle(visibility)
         ss.field = field
 
         self.assertEqual(ss.count_visibility_left(0), 3)
@@ -68,7 +69,7 @@ class Test_TowerPuzzle(unittest.TestCase):
     def test_count_unfilled(self):
         visibility = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
         field = [[0, 0, 0], [1, 2, 3], [0, 2, 0]]
-        ss = TowerPuzzle.TowerPuzzle(visibility)
+        ss = TowerPuzzle(visibility)
         ss.field = field
 
         self.assertEqual(ss.count_unfilled_cells_horizontal(0), 3)
@@ -79,30 +80,43 @@ class Test_TowerPuzzle(unittest.TestCase):
         self.assertEqual(ss.count_unfilled_cells_vertical(1), 1)
         self.assertEqual(ss.count_unfilled_cells_vertical(2), 2)
 
+    def test_str(self):
+        visibility = [[2, 2, 2, 3, 1], [2, 2, 3, 1, 3], [2, 2, 3, 1, 5], [1, 2, 3, 3, 2]]
+        field = [[4, 3, 1, 5, 2], [1, 5, 2, 3, 4], [2, 1, 5, 4, 3], [3, 2, 4, 1, 5], [5, 4, 3, 2, 1]]
+        field = get_field_from_array(field)
+        ss = TowerPuzzle(visibility, field)
+        print(ss)
+
+    def test_is_solved(self):
+        visibility = [[2, 2, 2, 3, 1], [2, 2, 3, 1, 3], [2, 2, 3, 1, 5], [1, 2, 3, 3, 2]]
+        field = [[4, 3, 1, 5, 2], [1, 5, 2, 3, 4], [2, 1, 5, 4, 3], [3, 2, 4, 1, 5], [5, 4, 3, 2, 1]]
+        field = get_field_from_array(field)
+        print(field)
+
 
 class Test_Cell(unittest.TestCase):
 
     def test_init(self):
-        cell = TowerPuzzle.TowerPuzzle.Cell(9)
+        cell = TowerPuzzle.Cell(9)
         self.assertEqual(cell.array, [1, 2, 3, 4, 5, 6, 7, 8, 9])
 
-        cell = TowerPuzzle.TowerPuzzle.Cell(1)
+        cell = TowerPuzzle.Cell(1)
         self.assertEqual(cell.array, [1])
 
-        cell = TowerPuzzle.TowerPuzzle.Cell(20)
+        cell = TowerPuzzle.Cell(20)
         self.assertEqual(cell.array, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])
 
-        cell = TowerPuzzle.TowerPuzzle.Cell(0)
+        cell = TowerPuzzle.Cell(0)
         self.assertEqual(cell.array, [])
 
-        cell = TowerPuzzle.TowerPuzzle.Cell(0, 4)
+        cell = TowerPuzzle.Cell(0, 4)
         self.assertEqual(cell.array, [])
 
-        cell = TowerPuzzle.TowerPuzzle.Cell(4, 4)
+        cell = TowerPuzzle.Cell(4, 4)
         self.assertEqual(cell.array, [0, 0, 0, 4])
 
     def test_remove(self):
-        cell = TowerPuzzle.TowerPuzzle.Cell(9)
+        cell = TowerPuzzle.Cell(9)
 
         cell.remove(1)
         self.assertEqual(cell.array, [0, 2, 3, 4, 5, 6, 7, 8, 9])
@@ -114,7 +128,7 @@ class Test_Cell(unittest.TestCase):
         self.assertEqual(cell.array, [0, 2, 3, 4, 5, 6, 0, 8, 9])
 
     def test_set(self):
-        cell = TowerPuzzle.TowerPuzzle.Cell(9)
+        cell = TowerPuzzle.Cell(9)
 
         cell.set(4)
         self.assertEqual(cell.array, [0, 0, 0, 4, 0, 0, 0, 0, 0, ])
@@ -126,7 +140,7 @@ class Test_Cell(unittest.TestCase):
         self.assertEqual(cell.array, [0, 0, 0, 0, 0, 6, 0, 0, 0, ])
 
     def test_get_not_zeros(self):
-        cell = TowerPuzzle.TowerPuzzle.Cell(9)
+        cell = TowerPuzzle.Cell(9)
 
         self.assertEqual(cell.get_not_zeros(), [1, 2, 3, 4, 5, 6, 7, 8, 9])
 
@@ -137,7 +151,7 @@ class Test_Cell(unittest.TestCase):
         self.assertEqual(cell.get_not_zeros(), [])
 
     def test_str(self):
-        cell = TowerPuzzle.TowerPuzzle.Cell(9)
+        cell = TowerPuzzle.Cell(9)
 
         self.assertEqual(str(cell), "[1 2 3 4 5 6 7 8 9]")
 
@@ -151,7 +165,7 @@ class Test_Cell(unittest.TestCase):
         self.assertEqual(str(cell), "[- - - - - 6 - - -]")
 
     def test_int(self):
-        cell = TowerPuzzle.TowerPuzzle.Cell(9)
+        cell = TowerPuzzle.Cell(9)
 
         self.assertEqual(int(cell), 0)
 
@@ -163,3 +177,20 @@ class Test_Cell(unittest.TestCase):
 
         cell.set(9)
         self.assertEqual(int(cell), 9)
+
+
+class Test_get_field_from_array(unittest.TestCase):
+    def test_function(self):
+        array = [[1, 2, 3], [2, 3, 1], [3, 1, 2]]
+        field = [[TowerPuzzle.Cell(3, 1), TowerPuzzle.Cell(3, 2), TowerPuzzle.Cell(3, 3)],
+                 [TowerPuzzle.Cell(3, 2), TowerPuzzle.Cell(3, 3), TowerPuzzle.Cell(3, 1)],
+                 [TowerPuzzle.Cell(3, 3), TowerPuzzle.Cell(3, 1), TowerPuzzle.Cell(3, 2)]]
+
+        self.assertEqual(get_field_from_array(array), field)
+
+        array = [[1, 0, 3], [0, 0, 0], [0, 0, 0]]
+        field = [[TowerPuzzle.Cell(3, 1), TowerPuzzle.Cell(3), TowerPuzzle.Cell(3, 3)],
+                 [TowerPuzzle.Cell(3), TowerPuzzle.Cell(3), TowerPuzzle.Cell(3)],
+                 [TowerPuzzle.Cell(3), TowerPuzzle.Cell(3), TowerPuzzle.Cell(3)]]
+
+        self.assertEqual(get_field_from_array(array), field)
