@@ -80,7 +80,7 @@ class TowerPuzzle:
             return result
 
     def __init__(self, visibility_, field_=None):
-        # visibility - числа по краям поля
+        # visibility - числа по краям поля, если 0, то ограничений нет
         self.visibility_left = visibility_[0]
         self.visibility_up = visibility_[1]
         self.visibility_right = visibility_[2]
@@ -173,20 +173,24 @@ class TowerPuzzle:
         return result
 
     def is_solved(self):
-        visibility_left_current = []
-        visibility_up_current = []
-        visibility_right_current = []
-        visibility_down_current = []
-
         for i in range(self.size):
-            visibility_left_current.append(self.count_visibility_left(i))
-            visibility_right_current.append(self.count_visibility_right(i))
-            visibility_up_current.append(self.count_visibility_up(i))
-            visibility_down_current.append(self.count_visibility_down(i))
-        return (visibility_left_current == self.visibility_left) and (
-                visibility_right_current == self.visibility_right) and (
-                       visibility_up_current == self.visibility_up) and (
-                       visibility_down_current == self.visibility_down)
+            for j in range(self.size):
+                if int(self.field[i][j]) == 0:
+                    return False
+
+            if (self.visibility_left[i] != self.count_visibility_left(i)) and (self.visibility_left[i] != 0):
+                return False
+
+            if (self.visibility_right[i] != self.count_visibility_right(i)) and (self.visibility_right[i] != 0):
+                return False
+
+            if (self.visibility_up[i] != self.count_visibility_up(i)) and (self.visibility_up[i] != 0):
+                return False
+
+            if (self.visibility_down[i] != self.count_visibility_down(i)) and (self.visibility_down[i] != 0):
+                return False
+
+        return True
 
 
 if __name__ == '__main__':
