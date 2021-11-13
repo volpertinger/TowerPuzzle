@@ -20,7 +20,7 @@ class Test_TowerPuzzle(unittest.TestCase):
         visibility = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
         field = [[1, 2, 3], [2, 3, 1], [3, 1, 2]]
         ss = TowerPuzzle(visibility)
-        ss.field = field
+        ss.field = get_field_from_array(field)
 
         self.assertEqual(ss.count_visibility_left(0), 3)
         self.assertEqual(ss.count_visibility_left(1), 2)
@@ -40,7 +40,7 @@ class Test_TowerPuzzle(unittest.TestCase):
 
         field = [[3, 2, 5, 4, 1], [4, 5, 3, 1, 2], [5, 4, 1, 2, 3], [2, 1, 4, 3, 5], [1, 3, 2, 5, 4]]
         ss.size = 5
-        ss.field = field
+        ss.field = get_field_from_array(field)
 
         self.assertEqual(ss.count_visibility_left(0), 2)
         self.assertEqual(ss.count_visibility_left(1), 2)
@@ -70,7 +70,7 @@ class Test_TowerPuzzle(unittest.TestCase):
         visibility = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
         field = [[0, 0, 0], [1, 2, 3], [0, 2, 0]]
         ss = TowerPuzzle(visibility)
-        ss.field = field
+        ss.field = get_field_from_array(field)
 
         self.assertEqual(ss.count_unfilled_cells_horizontal(0), 3)
         self.assertEqual(ss.count_unfilled_cells_horizontal(1), 0)
@@ -101,7 +101,8 @@ class Test_TowerPuzzle(unittest.TestCase):
         visibility = [[2, 2, 2, 3, 1], [2, 2, 3, 1, 3], [2, 2, 3, 1, 5], [1, 2, 3, 3, 2]]
         field = [[4, 3, 1, 5, 2], [1, 5, 2, 3, 4], [2, 1, 5, 4, 3], [3, 2, 4, 1, 5], [5, 4, 3, 2, 1]]
         field = get_field_from_array(field)
-        print(field)
+        ss = TowerPuzzle(visibility, field)
+        self.assertTrue(ss.is_solved())
 
 
 class Test_Cell(unittest.TestCase):

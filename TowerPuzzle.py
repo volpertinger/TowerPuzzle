@@ -123,8 +123,8 @@ class TowerPuzzle:
         result = 0
         max_height = 0
         for i in range(self.size):
-            if max_height < self.field[index_][i]:
-                max_height = self.field[index_][i]
+            if max_height < int(self.field[index_][i]):
+                max_height = int(self.field[index_][i])
                 result += 1
         return result
 
@@ -132,8 +132,8 @@ class TowerPuzzle:
         result = 0
         max_height = 0
         for i in range(self.size):
-            if max_height < self.field[index_][self.size - i - 1]:
-                max_height = self.field[index_][self.size - i - 1]
+            if max_height < int(self.field[index_][self.size - i - 1]):
+                max_height = int(self.field[index_][self.size - i - 1])
                 result += 1
         return result
 
@@ -141,8 +141,8 @@ class TowerPuzzle:
         result = 0
         max_height = 0
         for i in range(self.size):
-            if max_height < self.field[i][index_]:
-                max_height = self.field[i][index_]
+            if max_height < int(self.field[i][index_]):
+                max_height = int(self.field[i][index_])
                 result += 1
         return result
 
@@ -150,22 +150,22 @@ class TowerPuzzle:
         result = 0
         max_height = 0
         for i in range(self.size):
-            if max_height < self.field[self.size - i - 1][index_]:
-                max_height = self.field[self.size - i - 1][index_]
+            if max_height < int(self.field[self.size - i - 1][index_]):
+                max_height = int(self.field[self.size - i - 1][index_])
                 result += 1
         return result
 
     def count_unfilled_cells_horizontal(self, index_):
         result = 0
         for i in range(self.size):
-            if self.field[index_][i] == 0:
+            if int(self.field[index_][i]) == 0:
                 result += 1
         return result
 
     def count_unfilled_cells_vertical(self, index_):
         result = 0
         for i in range(self.size):
-            if self.field[i][index_] == 0:
+            if int(self.field[i][index_]) == 0:
                 result += 1
         return result
 
