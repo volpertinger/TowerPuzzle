@@ -91,30 +91,31 @@ class TowerPuzzle:
             self.field = field_
 
     def __str__(self):
+        border = '-' * (self.size * (2 * self.size + 1) + 4) + '\n'
         # Шапка
-        result = ' ' + '-' * (self.size * self.size + 2) + '\n'
+        result = border
 
         # visibility up
         result += ' |'
         for i in range(self.size):
-            result += str(self.visibility_up[i]).center(self.size, '-')
-        result += ' |\n'
+            result += '[' + str(self.visibility_up[i]).center(2 * self.size - 1, '-') + ']'
+        result += '|\n'
 
         # field
         for i in range(self.size):
             result += str(self.visibility_left[i]) + '|'
             for j in range(self.size):
                 result += str(self.field[i][j])
-            result += str(self.visibility_right[i]) + '|\n'
+            result += '|' + str(self.visibility_right[i]) + '\n'
 
         # visibility down
         result += ' |'
         for i in range(self.size):
-            result += str(self.visibility_down[i]).center(self.size, '-')
-        result += ' |\n'
+            result += '[' + str(self.visibility_down[i]).center(2 * self.size - 1, '-') + ']'
+        result += '|\n'
 
         # подвал
-        result += ' ' + '-' * (self.size * self.size + 2) + '\n'
+        result += border
 
         return result
 
