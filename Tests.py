@@ -104,6 +104,18 @@ class Test_TowerPuzzle(unittest.TestCase):
         ss = TowerPuzzle(visibility, field)
         self.assertTrue(ss.is_solved())
 
+        field = [[3, 1, 5, 2, 4], [5, 2, 3, 4, 1], [1, 5, 4, 3, 2], [2, 4, 1, 5, 3], [4, 3, 2, 1, 5]]
+        ss.field = get_field_from_array(field)
+        self.assertFalse(ss.is_solved())
+
+        field = [[4, 0, 1, 5, 2], [1, 5, 2, 3, 4], [2, 1, 5, 4, 3], [3, 2, 4, 1, 5], [5, 4, 3, 2, 1]]
+        ss.field = get_field_from_array(field)
+        self.assertFalse(ss.is_solved())
+
+        field = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
+        ss.field = get_field_from_array(field)
+        self.assertFalse(ss.is_solved())
+
 
 class Test_Cell(unittest.TestCase):
 
