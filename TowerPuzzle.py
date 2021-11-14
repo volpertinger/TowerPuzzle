@@ -68,8 +68,8 @@ class TowerPuzzle:
             self.array = result
 
         def remove(self, number_):
-            if (number_ > len(self.array)) or (number_ < 1):
-                raise RuntimeError("Number " + str(number_) + " doesn't exist in cell")
+            if number_ < 1:
+                raise RuntimeError("Number " + str(number_) + " < 1")
             self.array[number_ - 1] = 0
 
         def get_not_zeros(self):
@@ -218,6 +218,30 @@ class TowerPuzzle:
                 self.set(0, i, self.size)
             if self.visibility_down[i] == 1:
                 self.set(self.size - 1, i, self.size)
+
+    def solve_base_restrictions(self):
+        for i in range(self.size):
+            for j in range(self.size):
+                restriction_left = self.size - self.visibility_left[i] + 1 + j
+                restriction_right = self.size - self.visibility_right[i] - j + self.size
+                restriction_up = self.size - self.visibility_up[j] + 1 + i
+                restriction_down = self.size - self.visibility_down[j] - i + self.size
+                restriction = min(restriction_left, restriction_right, restriction_up, restriction_down)
+                self.remove_higher(i, j, restriction)
+
+    def solve_castle_restrictions(self, row, column):
+        if not self.field[row][column]:
+            return
+
+        number = int(self.field[row][column])
+        for i in range(0, column):
+            self.remove(row, i, number)
+        for i in range(column + 1, self.size):
+            self.remove(row, i, number)
+        for i in range(0, row):
+            self.remove(i, column, number)
+        for i in range(row + 1, self.size):
+            self.remove(i, column, number)
 
 
 if __name__ == '__main__':

@@ -206,6 +206,79 @@ class Test_TowerPuzzle(unittest.TestCase):
         ss.solve_trivial_highest()
         self.assertEqual(ss.field, field)
 
+    def test_solve_base_restrictions(self):
+        visibility = [[1, 3, 2], [1, 3, 2], [2, 1, 2], [2, 1, 2]]
+        ss = TowerPuzzle(visibility)
+        field = [[0, 1, 0], [1, 0, 0], [0, 0, 0]]
+        field = get_field_from_array(field)
+        field[0][2].remove(3)
+        field[1][1].remove(3)
+        field[2][0].remove(3)
+        field[2][2].remove(3)
+        ss.solve_base_restrictions()
+
+        self.assertEqual(ss.field, field)
+
+    def test_solve_castle_restrictions(self):
+        visibility = [[0, 0], [0, 0], [0, 0], [0, 0]]
+        field = [[1, 0], [0, 0]]
+        field = get_field_from_array(field)
+        ss = TowerPuzzle(visibility, field)
+        ss.solve_castle_restrictions(0, 0)
+        field = [[1, 2], [2, 0]]
+        field = get_field_from_array(field)
+
+        self.assertEqual(ss.field, field)
+
+        ss.solve_castle_restrictions(1, 0)
+        field = [[1, 2], [2, 1]]
+        field = get_field_from_array(field)
+        self.assertEqual(ss.field, field)
+
+        visibility = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        field = [[0, 0, 0], [0, 3, 0], [0, 0, 0]]
+        field = get_field_from_array(field)
+        ss = TowerPuzzle(visibility, field)
+        ss.solve_castle_restrictions(1, 1)
+        field[0][1].remove(3)
+        field[1][0].remove(3)
+        field[1][2].remove(3)
+        field[2][1].remove(3)
+
+        self.assertEqual(ss.field, field)
+
+        field[2][0].set(1)
+        ss.field = field
+        ss.solve_castle_restrictions(2, 0)
+        field[0][0].remove(1)
+        field[1][0].set(2)
+        field[2][1].set(2)
+        field[2][2].remove(1)
+
+        self.assertEqual(ss.field, field)
+
+        visibility = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        field = [[0, 0, 0], [0, 3, 0], [0, 0, 0]]
+        field = get_field_from_array(field)
+        ss = TowerPuzzle(visibility, field)
+        ss.solve_castle_restrictions(0, 0)
+
+        self.assertEqual(ss.field, field)
+
+        visibility = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        field = [[0, 0, 0], [0, 3, 0], [0, 0, 0]]
+        field = get_field_from_array(field)
+        ss = TowerPuzzle(visibility, field)
+        field[0][1].remove(3)
+        field[1][0].remove(3)
+        field[1][2].remove(3)
+        field[2][1].remove(3)
+        field[2][0].set(3)
+        ss.field = field
+        field[0][0].remove(3)
+
+        self.assertEqual(ss.field, field)
+
 
 class Test_Cell(unittest.TestCase):
 
