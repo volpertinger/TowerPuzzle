@@ -279,6 +279,27 @@ class Test_TowerPuzzle(unittest.TestCase):
 
         self.assertEqual(ss.field, field)
 
+    def test_only_one_row(self):
+        visibility = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        field = [[0, 0, 0], [0, 0, 1], [0, 0, 0]]
+        field = get_field_from_array(field)
+        field[1][1].remove(3)
+        ss = TowerPuzzle(visibility, field)
+        ss.solve_only_one_row(1)
+        field[1][0].set(3)
+
+        self.assertEqual(ss.field, field)
+
+        ss.solve_only_one_row(1)
+        field[1][1].set(2)
+
+        self.assertEqual(ss.field, field)
+
+        ss.solve_only_one_row(1)
+        field[1][2].set(1)
+
+        self.assertEqual(ss.field, field)
+
 
 class Test_Cell(unittest.TestCase):
 

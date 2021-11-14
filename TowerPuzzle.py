@@ -243,6 +243,22 @@ class TowerPuzzle:
         for i in range(row + 1, self.size):
             self.remove(i, column, number)
 
+    def solve_only_one_row(self, row):
+        count_list = {}
+        for i in range(self.size):
+            count_list.update({i + 1: 0})
+        for i in range(self.size):
+            numbers = self.field[row][i].get_not_zeros()
+            for number in numbers:
+                count_list[number] += 1
+        for i in range(self.size):
+            if count_list[i + 1] == 1:
+                number = count_list[i + 1]
+                for j in range(self.size):
+                    if self.field[row][j].get_not_zeros().count(number) == 1:
+                        self.field[row][j].set(number)
+                        break
+
 
 if __name__ == '__main__':
     visibility = [[1, 2, 3], [1, 0, -5], [10, 12, 13], [11, 12, 13]]
