@@ -70,7 +70,11 @@ class TowerPuzzle:
         def remove(self, number_):
             if number_ < 1:
                 raise RuntimeError("Number " + str(number_) + " < 1")
+            result = False
+            if self.array.count(number_) != 0:
+                result = True
             self.array[number_ - 1] = 0
+            return result
 
         def get_not_zeros(self):
             result = []
@@ -202,7 +206,7 @@ class TowerPuzzle:
         self.field[row][column].set(number)
 
     def remove(self, row, column, number):
-        self.field[row][column].remove(number)
+        return self.field[row][column].remove(number)
 
     def remove_higher(self, row, column, number):
         for i in range(number + 1, self.size + 1):
@@ -233,16 +237,21 @@ class TowerPuzzle:
         if not self.field[row][column]:
             return False
 
+        result = False
         number = int(self.field[row][column])
         for i in range(0, column):
-            self.remove(row, i, number)
+            if self.remove(row, i, number):
+                result = True
         for i in range(column + 1, self.size):
-            self.remove(row, i, number)
+            if self.remove(row, i, number):
+                result = True
         for i in range(0, row):
-            self.remove(i, column, number)
+            if self.remove(i, column, number):
+                result = True
         for i in range(row + 1, self.size):
-            self.remove(i, column, number)
-        return True
+            if self.remove(i, column, number):
+                result = True
+        return result
 
     def solve_only_one_row(self, row):
         count_list = {}
@@ -255,7 +264,7 @@ class TowerPuzzle:
                 count_list[number] += 1
         for i in range(self.size):
             if count_list[i + 1] == 1:
-                number = count_list[i + 1]
+                number = i + 1
                 for j in range(self.size):
                     if self.field[row][j].get_not_zeros().count(number) == 1:
                         self.field[row][j].set(number)
@@ -265,6 +274,7 @@ class TowerPuzzle:
 
     def solve_only_one_column(self, column):
         count_list = {}
+        result = False
         for i in range(self.size):
             count_list.update({i + 1: 0})
         for i in range(self.size):
@@ -273,15 +283,35 @@ class TowerPuzzle:
                 count_list[number] += 1
         for i in range(self.size):
             if count_list[i + 1] == 1:
-                number = count_list[i + 1]
+                number = i + 1
                 for j in range(self.size):
                     if self.field[j][column].get_not_zeros().count(number) == 1:
                         self.field[j][column].set(number)
+                        result = True
                         break
+        return result
 
     def solve_by_restrictions(self):
         self.solve_trivial_highest()
         self.solve_base_restrictions()
+
+        while True:
+            solved_castle = False
+            solved_only_one = False
+
+            for i in range(self.size):
+                for j in range(self.size):
+                    if self.solve_castle_restrictions(i, j):
+                        solved_castle = True
+
+            for i in range(self.size):
+                if self.solve_only_one_row(i):
+                    solved_only_one = True
+                if self.solve_only_one_column(i):
+                    solved_only_one = True
+
+            if (not solved_only_one) or (not solved_castle):
+                break
 
         print(str(self))
 
