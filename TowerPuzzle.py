@@ -314,7 +314,27 @@ class TowerPuzzle:
                     end += step
         return result
 
-
+    def get_possible_columns(self, column):
+        result = [[]]
+        for i in range(self.size):
+            if self.field[i][column]:
+                for element in result:
+                    element.append(self.field[i][column])
+            else:
+                numbers = self.field[i][column].get_not_zeros()
+                length = len(result)
+                for j in range(len(numbers) - 1):
+                    for k in range(length):
+                        result.append(deepcopy(result[k]))
+                begin = 0
+                step = int(len(result) / len(numbers))
+                end = step
+                for number in numbers:
+                    for j in range(begin, end):
+                        result[j].append(TowerPuzzle.Cell(self.size, number))
+                    begin += step
+                    end += step
+        return result
 
     def solve_visibility_restriction_row(self):
         return
