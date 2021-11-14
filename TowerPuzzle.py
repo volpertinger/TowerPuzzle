@@ -231,7 +231,7 @@ class TowerPuzzle:
 
     def solve_castle_restrictions(self, row, column):
         if not self.field[row][column]:
-            return
+            return False
 
         number = int(self.field[row][column])
         for i in range(0, column):
@@ -242,9 +242,11 @@ class TowerPuzzle:
             self.remove(i, column, number)
         for i in range(row + 1, self.size):
             self.remove(i, column, number)
+        return True
 
     def solve_only_one_row(self, row):
         count_list = {}
+        result = False
         for i in range(self.size):
             count_list.update({i + 1: 0})
         for i in range(self.size):
@@ -257,7 +259,9 @@ class TowerPuzzle:
                 for j in range(self.size):
                     if self.field[row][j].get_not_zeros().count(number) == 1:
                         self.field[row][j].set(number)
+                        result = True
                         break
+        return result
 
     def solve_only_one_column(self, column):
         count_list = {}
@@ -275,7 +279,14 @@ class TowerPuzzle:
                         self.field[j][column].set(number)
                         break
 
+    def solve_by_restrictions(self):
+        self.solve_trivial_highest()
+        self.solve_base_restrictions()
+
+        print(str(self))
+
 
 if __name__ == '__main__':
-    visibility = [[1, 2, 3], [1, 0, -5], [10, 12, 13], [11, 12, 13]]
+    visibility = [[2, 1, 3, 2], [2, 3, 1, 3], [2, 2, 1, 3], [3, 1, 2, 2]]
     ss = TowerPuzzle(visibility)
+    ss.solve_by_restrictions()
