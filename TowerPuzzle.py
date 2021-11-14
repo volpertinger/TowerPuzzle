@@ -1,4 +1,5 @@
 import sys
+from copy import deepcopy
 
 
 # чтобы составлять поля менее громоздко
@@ -290,6 +291,33 @@ class TowerPuzzle:
                         result = True
                         break
         return result
+
+    def get_possible_rows(self, row):
+        result = [[]]
+        for i in range(self.size):
+            if self.field[row][i]:
+                for element in result:
+                    element.append(self.field[row][i])
+            else:
+                numbers = self.field[row][i].get_not_zeros()
+                length = len(result)
+                for j in range(len(numbers) - 1):
+                    for k in range(length):
+                        result.append(deepcopy(result[k]))
+                begin = 0
+                step = int(len(result) / len(numbers))
+                end = step
+                for number in numbers:
+                    for j in range(begin, end):
+                        result[j].append(TowerPuzzle.Cell(self.size, number))
+                    begin += step
+                    end += step
+        return result
+
+
+
+    def solve_visibility_restriction_row(self):
+        return
 
     def solve_by_restrictions(self):
         self.solve_trivial_highest()

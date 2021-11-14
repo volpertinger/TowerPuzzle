@@ -321,6 +321,20 @@ class Test_TowerPuzzle(unittest.TestCase):
 
         self.assertEqual(ss.field, field)
 
+    def test_get_possible_rows(self):
+        visibility = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+        field = [[3, 0, 0, 4], [4, 0, 0, 3], [1, 4, 3, 2], [2, 3, 4, 1]]
+        field = get_field_from_array(field)
+        field[0][1].remove(4)
+        field[0][1].remove(3)
+        field[0][2].remove(4)
+        field[0][2].remove(3)
+        ss = TowerPuzzle(visibility, field)
+        possible_rows = [[3, 1, 1, 4], [3, 2, 1, 4], [3, 1, 2, 4], [3, 2, 2, 4]]
+        possible_rows = get_field_from_array(possible_rows)
+        result = ss.get_possible_rows(0)
+        self.assertEqual(ss.get_possible_rows(0), possible_rows)
+
 
 class Test_Cell(unittest.TestCase):
 
