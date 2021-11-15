@@ -387,6 +387,44 @@ class Test_TowerPuzzle(unittest.TestCase):
 
         self.assertEqual(TowerPuzzle.get_right_vector_from_possible(2, 1, possible_matrix), right_matrix)
 
+    def test_get_cell_vector_from_matrix(self):
+        matrix = [[2, 1, 4, 3], [1, 2, 4, 3]]
+        matrix = get_field_from_array(matrix)
+        vector = [[0, 0, 4, 3]]
+        vector = get_field_from_array(vector)
+        vector[0][0].remove(3)
+        vector[0][0].remove(4)
+        vector[0][1].remove(3)
+        vector[0][1].remove(4)
+        self.assertEqual(TowerPuzzle.get_cell_vector_from_matrix(matrix), vector[0])
+
+        matrix = [[2, 1, 6, 9, 7, 8, 4, 3, 5], [2, 8, 6, 9, 7, 1, 4, 3, 5], [2, 8, 6, 9, 7, 3, 4, 1, 5]]
+        matrix = get_field_from_array(matrix)
+        vector = [[2, 0, 6, 9, 7, 0, 4, 0, 5]]
+        vector = get_field_from_array(vector)
+        vector[0][1].remove(2)
+        vector[0][1].remove(3)
+        vector[0][1].remove(4)
+        vector[0][1].remove(5)
+        vector[0][1].remove(6)
+        vector[0][1].remove(7)
+        vector[0][1].remove(9)
+        vector[0][5].remove(2)
+        vector[0][5].remove(4)
+        vector[0][5].remove(5)
+        vector[0][5].remove(6)
+        vector[0][5].remove(7)
+        vector[0][5].remove(9)
+        vector[0][7].remove(2)
+        vector[0][7].remove(4)
+        vector[0][7].remove(5)
+        vector[0][7].remove(6)
+        vector[0][7].remove(7)
+        vector[0][7].remove(8)
+        vector[0][7].remove(9)
+
+        self.assertEqual(TowerPuzzle.get_cell_vector_from_matrix(matrix), vector[0])
+
 
 class Test_Cell(unittest.TestCase):
 
