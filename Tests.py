@@ -496,6 +496,17 @@ class Test_TowerPuzzle(unittest.TestCase):
         ss._TowerPuzzle__solve_visibility_restriction_column(2)
         self.assertEqual(ss._TowerPuzzle__field, field)
 
+    def test_solve_with_field(self):
+        visibility = [[1, 4, 2, 2], [1, 2, 3, 2], [4, 1, 2, 2], [2, 1, 2, 3]]
+        field = [[0, 0, 0, 0], [0, 2, 0, 0], [2, 1, 4, 3], [0, 0, 0, 0]]
+        field = TowerPuzzle.get_field_from_array(field)
+        ss = TowerPuzzle(visibility, deepcopy(field))
+        field = [[4, 3, 2, 1], [1, 2, 3, 4], [2, 1, 4, 3], [3, 4, 1, 2]]
+        field = TowerPuzzle.get_field_from_array(field)
+        ss.solve()
+        self.assertEqual(ss._TowerPuzzle__field, field)
+
+
 
 class Test_Cell(unittest.TestCase):
 
