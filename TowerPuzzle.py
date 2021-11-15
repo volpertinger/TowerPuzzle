@@ -409,26 +409,26 @@ class TowerPuzzle:
         self.solve_base_restrictions()
 
         while True:
-            solved_castle = False
-            solved_only_one = False
-            solved_visibility = False
+            need_to_bruteforce = True
 
             for i in range(self.size):
                 for j in range(self.size):
                     if self.solve_castle_restrictions(i, j):
-                        solved_castle = True
+                        need_to_bruteforce = False
 
             for i in range(self.size):
                 if self.solve_only_one_row(i):
-                    solved_only_one = True
+                    need_to_bruteforce = False
                 if self.solve_only_one_column(i):
-                    solved_only_one = True
+                    need_to_bruteforce = False
 
             for i in range(self.size):
                 if self.solve_visibility_restriction_row(i):
-                    solved_visibility = True
+                    need_to_bruteforce = False
+                if self.solve_visibility_restriction_column(i):
+                    need_to_bruteforce = False
 
-            if (not solved_only_one) or (not solved_castle) or (not solved_visibility):
+            if need_to_bruteforce:
                 break
 
         print(str(self))
@@ -436,6 +436,6 @@ class TowerPuzzle:
 
 if __name__ == '__main__':
     visibility = [[2, 1, 2, 3], [2, 3, 3, 1], [1, 2, 3, 2], [2, 2, 1, 4]]
-    #visibility = [[2, 2, 1, 4], [3, 2, 1, 2], [2, 3, 3, 1], [2, 3, 2, 1]]
+    # visibility = [[2, 2, 1, 4], [3, 2, 1, 2], [2, 3, 3, 1], [2, 3, 2, 1]]
     ss = TowerPuzzle(visibility)
     ss.solve_by_restrictions()
