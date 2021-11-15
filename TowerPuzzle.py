@@ -315,7 +315,7 @@ class TowerPuzzle:
             if count_list[i + 1] == 1:
                 number = i + 1
                 for j in range(self.size):
-                    if self.field[row][j].get_not_zeros().count(number) == 1:
+                    if (self.field[row][j].get_not_zeros().count(number) == 1) and (not self.field[row][j]):
                         self.field[row][j].set(number)
                         result = True
                         break
@@ -334,7 +334,7 @@ class TowerPuzzle:
             if count_list[i + 1] == 1:
                 number = i + 1
                 for j in range(self.size):
-                    if self.field[j][column].get_not_zeros().count(number) == 1:
+                    if (self.field[j][column].get_not_zeros().count(number) == 1) and (not self.field[j][column]):
                         self.field[j][column].set(number)
                         result = True
                         break
