@@ -22,7 +22,7 @@ if __name__ == '__main__':
     input_file = open(input_name)
     size = int(input_file.readline()[:-1])
     visibility = []
-    for i in range(size):
+    for i in range(4):
         split_array = input_file.readline()[:-1].split(' ')
         row = []
         if split_array == ['']:
