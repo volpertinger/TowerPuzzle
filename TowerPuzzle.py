@@ -139,20 +139,32 @@ class TowerPuzzle:
             max_height_rhs = 0
             current_lhs_visibility = 0
             current_rhs_visibility = 0
-            unique_dict = {}
+            unique_array = []
             for i in range(len(vector)):
-                unique_dict.update({int(vector[i]): True})
+                if unique_array.count(int(vector[i])) == 0:
+                    unique_array.append(int(vector[i]))
                 if int(vector[i]) > max_height_lhs:
                     current_lhs_visibility += 1
-                    max_height_lhs = int(vector[i])
+                max_height_lhs = int(vector[i])
                 if int(vector[len(vector) - 1 - i]) > max_height_rhs:
                     current_rhs_visibility += 1
-                    max_height_rhs = int(vector[len(vector) - 1 - i])
+                max_height_rhs = int(vector[len(vector) - 1 - i])
+            unique_array.sort()
             if ((lhs_visibility == current_lhs_visibility) or (rhs_visibility == 0)) and (
                     (rhs_visibility == current_rhs_visibility) or (rhs_visibility == 0)) and (
-                    len(unique_dict) == len(vector)):
+                    len(unique_array) == len(vector)):
                 result.append(vector)
         return result
+
+    @staticmethod
+    def get_cell_vector_from_matrix(matrix):
+        unique_vector = [{}]
+        for i in range(len(matrix[0])):
+            unique_column = {}
+            for j in range(len(matrix)):
+                if unique_column.get(i) is None:
+                    unique_column.update({i: True})
+                    continue
 
     def count_visibility_left(self, index_):
         result = 0
