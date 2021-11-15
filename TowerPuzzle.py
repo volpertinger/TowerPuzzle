@@ -2,21 +2,8 @@ import sys
 from copy import deepcopy
 
 
-# чтобы составлять поля менее громоздко
-def get_field_from_array(array):
-    result = []
-    for i in range(len(array)):
-        result.append([])
-        for j in range(len(array[0])):
-            if array[i][j] == 0:
-                result[i].append(TowerPuzzle.Cell(len(array[0])))
-            else:
-                result[i].append(TowerPuzzle.Cell(len(array[0]), array[i][j]))
-    return result
-
-
 class TowerPuzzle:
-    class Cell:
+    class __Cell:
         def __init__(self, size_, number_=None):
             # если в процессе работы программы в этом массиве будет 0, то это так вычеркнут невозможный вариант
             self.array = []
@@ -86,44 +73,44 @@ class TowerPuzzle:
 
     def __init__(self, visibility_, field_=None):
         # visibility - числа по краям поля, если 0, то ограничений нет
-        self.visibility_left = visibility_[0]
-        self.visibility_up = visibility_[1]
-        self.visibility_right = visibility_[2]
-        self.visibility_down = visibility_[3]
+        self.__visibility_left = visibility_[0]
+        self.__visibility_up = visibility_[1]
+        self.__visibility_right = visibility_[2]
+        self.__visibility_down = visibility_[3]
 
-        self.size = len(visibility_[0])
+        self.__size = len(visibility_[0])
         if field_ is None:
             # self.field = [[TowerPuzzle.Cell(len(visibility_[0]))] * len(visibility_[0])] * len(visibility_[0])
-            self.field = []
+            self.__field = []
             for i in range(len(visibility_[0])):
-                self.field.append([])
+                self.__field.append([])
                 for j in range(len(visibility_[0])):
-                    self.field[i].append(TowerPuzzle.Cell(len(visibility_[0])))
+                    self.__field[i].append(TowerPuzzle.__Cell(len(visibility_[0])))
         else:
-            self.field = field_
+            self.__field = field_
 
     def __str__(self):
-        border = '-' * (self.size * (2 * self.size + 1) + 4) + '\n'
+        border = '-' * (self.__size * (2 * self.__size + 1) + 4) + '\n'
         # Шапка
         result = border
 
         # visibility up
         result += ' |'
-        for i in range(self.size):
-            result += '[' + str(self.visibility_up[i]).center(2 * self.size - 1, '-') + ']'
+        for i in range(self.__size):
+            result += '[' + str(self.__visibility_up[i]).center(2 * self.__size - 1, '-') + ']'
         result += '|\n'
 
         # field
-        for i in range(self.size):
-            result += str(self.visibility_left[i]) + '|'
-            for j in range(self.size):
-                result += str(self.field[i][j])
-            result += '|' + str(self.visibility_right[i]) + '\n'
+        for i in range(self.__size):
+            result += str(self.__visibility_left[i]) + '|'
+            for j in range(self.__size):
+                result += str(self.__field[i][j])
+            result += '|' + str(self.__visibility_right[i]) + '\n'
 
         # visibility down
         result += ' |'
-        for i in range(self.size):
-            result += '[' + str(self.visibility_down[i]).center(2 * self.size - 1, '-') + ']'
+        for i in range(self.__size):
+            result += '[' + str(self.__visibility_down[i]).center(2 * self.__size - 1, '-') + ']'
         result += '|\n'
 
         # подвал
@@ -131,8 +118,21 @@ class TowerPuzzle:
 
         return result
 
+    # чтобы составлять поля менее громоздко
     @staticmethod
-    def get_right_vector_from_possible(lhs_visibility, rhs_visibility, matrix):
+    def get_field_from_array(array):
+        result = []
+        for i in range(len(array)):
+            result.append([])
+            for j in range(len(array[0])):
+                if array[i][j] == 0:
+                    result[i].append(TowerPuzzle.__Cell(len(array[0])))
+                else:
+                    result[i].append(TowerPuzzle.__Cell(len(array[0]), array[i][j]))
+        return result
+
+    @staticmethod
+    def __get_right_vector_from_possible(lhs_visibility, rhs_visibility, matrix):
         result = []
         for vector in matrix:
             max_height_lhs = 0
@@ -157,7 +157,7 @@ class TowerPuzzle:
         return result
 
     @staticmethod
-    def get_cell_vector_from_matrix(matrix):
+    def __get_cell_vector_from_matrix(matrix):
         if len(matrix) == 0:
             return
         length = len(matrix[0])
@@ -171,183 +171,183 @@ class TowerPuzzle:
         result = []
         for vector in unique_vector:
             if len(vector) == 1:
-                result.append(TowerPuzzle.Cell(length, vector[0]))
+                result.append(TowerPuzzle.__Cell(length, vector[0]))
             else:
-                result.append(TowerPuzzle.Cell(length))
+                result.append(TowerPuzzle.__Cell(length))
                 for i in range(length):
                     if vector.count(i + 1) == 0:
                         result[len(result) - 1].remove(i + 1)
         return result
 
-    def count_visibility_left(self, index_):
+    def __count_visibility_left(self, index_):
         result = 0
         max_height = 0
-        for i in range(self.size):
-            if max_height < int(self.field[index_][i]):
-                max_height = int(self.field[index_][i])
+        for i in range(self.__size):
+            if max_height < int(self.__field[index_][i]):
+                max_height = int(self.__field[index_][i])
                 result += 1
         return result
 
-    def count_visibility_right(self, index_):
+    def __count_visibility_right(self, index_):
         result = 0
         max_height = 0
-        for i in range(self.size):
-            if max_height < int(self.field[index_][self.size - i - 1]):
-                max_height = int(self.field[index_][self.size - i - 1])
+        for i in range(self.__size):
+            if max_height < int(self.__field[index_][self.__size - i - 1]):
+                max_height = int(self.__field[index_][self.__size - i - 1])
                 result += 1
         return result
 
-    def count_visibility_up(self, index_):
+    def __count_visibility_up(self, index_):
         result = 0
         max_height = 0
-        for i in range(self.size):
-            if max_height < int(self.field[i][index_]):
-                max_height = int(self.field[i][index_])
+        for i in range(self.__size):
+            if max_height < int(self.__field[i][index_]):
+                max_height = int(self.__field[i][index_])
                 result += 1
         return result
 
-    def count_visibility_down(self, index_):
+    def __count_visibility_down(self, index_):
         result = 0
         max_height = 0
-        for i in range(self.size):
-            if max_height < int(self.field[self.size - i - 1][index_]):
-                max_height = int(self.field[self.size - i - 1][index_])
+        for i in range(self.__size):
+            if max_height < int(self.__field[self.__size - i - 1][index_]):
+                max_height = int(self.__field[self.__size - i - 1][index_])
                 result += 1
         return result
 
-    def count_unfilled_cells_horizontal(self, index_):
+    def __count_unfilled_cells_horizontal(self, index_):
         result = 0
-        for i in range(self.size):
-            if int(self.field[index_][i]) == 0:
+        for i in range(self.__size):
+            if int(self.__field[index_][i]) == 0:
                 result += 1
         return result
 
-    def count_unfilled_cells_vertical(self, index_):
+    def __count_unfilled_cells_vertical(self, index_):
         result = 0
-        for i in range(self.size):
-            if int(self.field[i][index_]) == 0:
+        for i in range(self.__size):
+            if int(self.__field[i][index_]) == 0:
                 result += 1
         return result
 
-    def is_solved(self):
-        for i in range(self.size):
-            for j in range(self.size):
-                if int(self.field[i][j]) == 0:
+    def __is_solved(self):
+        for i in range(self.__size):
+            for j in range(self.__size):
+                if int(self.__field[i][j]) == 0:
                     return False
 
-            if (self.visibility_left[i] != self.count_visibility_left(i)) and (self.visibility_left[i] != 0):
+            if (self.__visibility_left[i] != self.__count_visibility_left(i)) and (self.__visibility_left[i] != 0):
                 return False
 
-            if (self.visibility_right[i] != self.count_visibility_right(i)) and (self.visibility_right[i] != 0):
+            if (self.__visibility_right[i] != self.__count_visibility_right(i)) and (self.__visibility_right[i] != 0):
                 return False
 
-            if (self.visibility_up[i] != self.count_visibility_up(i)) and (self.visibility_up[i] != 0):
+            if (self.__visibility_up[i] != self.__count_visibility_up(i)) and (self.__visibility_up[i] != 0):
                 return False
 
-            if (self.visibility_down[i] != self.count_visibility_down(i)) and (self.visibility_down[i] != 0):
+            if (self.__visibility_down[i] != self.__count_visibility_down(i)) and (self.__visibility_down[i] != 0):
                 return False
 
         return True
 
-    def set(self, row, column, number):
-        if self.field[row][column]:
+    def __set(self, row, column, number):
+        if self.__field[row][column]:
             return
-        self.field[row][column].set(number)
+        self.__field[row][column].set(number)
 
-    def remove(self, row, column, number):
-        return self.field[row][column].remove(number)
+    def __remove(self, row, column, number):
+        return self.__field[row][column].remove(number)
 
-    def remove_higher(self, row, column, number):
-        for i in range(number + 1, self.size + 1):
-            self.remove(row, column, i)
+    def __remove_higher(self, row, column, number):
+        for i in range(number + 1, self.__size + 1):
+            self.__remove(row, column, i)
 
-    def solve_trivial_highest(self):
-        for i in range(self.size):
-            if self.visibility_left[i] == 1:
-                self.set(i, 0, self.size)
-            if self.visibility_right[i] == 1:
-                self.set(i, self.size - 1, self.size)
-            if self.visibility_up[i] == 1:
-                self.set(0, i, self.size)
-            if self.visibility_down[i] == 1:
-                self.set(self.size - 1, i, self.size)
+    def __solve_trivial_highest(self):
+        for i in range(self.__size):
+            if self.__visibility_left[i] == 1:
+                self.__set(i, 0, self.__size)
+            if self.__visibility_right[i] == 1:
+                self.__set(i, self.__size - 1, self.__size)
+            if self.__visibility_up[i] == 1:
+                self.__set(0, i, self.__size)
+            if self.__visibility_down[i] == 1:
+                self.__set(self.__size - 1, i, self.__size)
 
-    def solve_base_restrictions(self):
-        for i in range(self.size):
-            for j in range(self.size):
-                restriction_left = self.size - self.visibility_left[i] + 1 + j
-                restriction_right = self.size - self.visibility_right[i] - j + self.size
-                restriction_up = self.size - self.visibility_up[j] + 1 + i
-                restriction_down = self.size - self.visibility_down[j] - i + self.size
+    def __solve_base_restrictions(self):
+        for i in range(self.__size):
+            for j in range(self.__size):
+                restriction_left = self.__size - self.__visibility_left[i] + 1 + j
+                restriction_right = self.__size - self.__visibility_right[i] - j + self.__size
+                restriction_up = self.__size - self.__visibility_up[j] + 1 + i
+                restriction_down = self.__size - self.__visibility_down[j] - i + self.__size
                 restriction = min(restriction_left, restriction_right, restriction_up, restriction_down)
-                self.remove_higher(i, j, restriction)
+                self.__remove_higher(i, j, restriction)
 
-    def solve_castle_restrictions(self, row, column):
-        if not self.field[row][column]:
+    def __solve_castle_restrictions(self, row, column):
+        if not self.__field[row][column]:
             return False
 
         result = False
-        number = int(self.field[row][column])
+        number = int(self.__field[row][column])
         for i in range(0, column):
-            if self.remove(row, i, number):
+            if self.__remove(row, i, number):
                 result = True
-        for i in range(column + 1, self.size):
-            if self.remove(row, i, number):
+        for i in range(column + 1, self.__size):
+            if self.__remove(row, i, number):
                 result = True
         for i in range(0, row):
-            if self.remove(i, column, number):
+            if self.__remove(i, column, number):
                 result = True
-        for i in range(row + 1, self.size):
-            if self.remove(i, column, number):
+        for i in range(row + 1, self.__size):
+            if self.__remove(i, column, number):
                 result = True
         return result
 
-    def solve_only_one_row(self, row):
+    def __solve_only_one_row(self, row):
         count_list = {}
         result = False
-        for i in range(self.size):
+        for i in range(self.__size):
             count_list.update({i + 1: 0})
-        for i in range(self.size):
-            numbers = self.field[row][i].get_not_zeros()
+        for i in range(self.__size):
+            numbers = self.__field[row][i].get_not_zeros()
             for number in numbers:
                 count_list[number] += 1
-        for i in range(self.size):
+        for i in range(self.__size):
             if count_list[i + 1] == 1:
                 number = i + 1
-                for j in range(self.size):
-                    if (self.field[row][j].get_not_zeros().count(number) == 1) and (not self.field[row][j]):
-                        self.field[row][j].set(number)
+                for j in range(self.__size):
+                    if (self.__field[row][j].get_not_zeros().count(number) == 1) and (not self.__field[row][j]):
+                        self.__field[row][j].set(number)
                         result = True
                         break
         return result
 
-    def solve_only_one_column(self, column):
+    def __solve_only_one_column(self, column):
         count_list = {}
         result = False
-        for i in range(self.size):
+        for i in range(self.__size):
             count_list.update({i + 1: 0})
-        for i in range(self.size):
-            numbers = self.field[i][column].get_not_zeros()
+        for i in range(self.__size):
+            numbers = self.__field[i][column].get_not_zeros()
             for number in numbers:
                 count_list[number] += 1
-        for i in range(self.size):
+        for i in range(self.__size):
             if count_list[i + 1] == 1:
                 number = i + 1
-                for j in range(self.size):
-                    if (self.field[j][column].get_not_zeros().count(number) == 1) and (not self.field[j][column]):
-                        self.field[j][column].set(number)
+                for j in range(self.__size):
+                    if (self.__field[j][column].get_not_zeros().count(number) == 1) and (not self.__field[j][column]):
+                        self.__field[j][column].set(number)
                         result = True
                         break
         return result
 
-    def get_possible_rows(self, row):
+    def __get_possible_rows(self, row):
         result = [[]]
-        for i in range(self.size):
-            if self.field[row][i]:
+        for i in range(self.__size):
+            if self.__field[row][i]:
                 for element in result:
-                    element.append(deepcopy(self.field[row][i]))
+                    element.append(deepcopy(self.__field[row][i]))
             else:
-                numbers = self.field[row][i].get_not_zeros()
+                numbers = self.__field[row][i].get_not_zeros()
                 length = len(result)
                 for j in range(len(numbers) - 1):
                     for k in range(length):
@@ -357,19 +357,19 @@ class TowerPuzzle:
                 end = step
                 for number in numbers:
                     for j in range(begin, end):
-                        result[j].append(TowerPuzzle.Cell(self.size, number))
+                        result[j].append(TowerPuzzle.__Cell(self.__size, number))
                     begin += step
                     end += step
         return result
 
-    def get_possible_columns(self, column):
+    def __get_possible_columns(self, column):
         result = [[]]
-        for i in range(self.size):
-            if self.field[i][column]:
+        for i in range(self.__size):
+            if self.__field[i][column]:
                 for element in result:
-                    element.append(self.field[i][column])
+                    element.append(self.__field[i][column])
             else:
-                numbers = self.field[i][column].get_not_zeros()
+                numbers = self.__field[i][column].get_not_zeros()
                 length = len(result)
                 for j in range(len(numbers) - 1):
                     for k in range(length):
@@ -379,63 +379,68 @@ class TowerPuzzle:
                 end = step
                 for number in numbers:
                     for j in range(begin, end):
-                        result[j].append(TowerPuzzle.Cell(self.size, number))
+                        result[j].append(TowerPuzzle.__Cell(self.__size, number))
                     begin += step
                     end += step
         return result
 
-    def solve_visibility_restriction_row(self, row):
-        result = self.get_possible_rows(row)
-        result = self.get_right_vector_from_possible(self.visibility_left[row], self.visibility_right[row], result)
-        result = self.get_cell_vector_from_matrix(result)
-        if self.field[row] == result:
+    def __solve_visibility_restriction_row(self, row):
+        result = self.__get_possible_rows(row)
+        result = self.__get_right_vector_from_possible(self.__visibility_left[row], self.__visibility_right[row],
+                                                       result)
+        result = self.__get_cell_vector_from_matrix(result)
+        if self.__field[row] == result:
             return False
-        self.field[row] = deepcopy(result)
+        self.__field[row] = deepcopy(result)
         return True
 
-    def solve_visibility_restriction_column(self, column):
-        result = self.get_possible_columns(column)
-        result = self.get_right_vector_from_possible(self.visibility_up[column], self.visibility_down[column], result)
-        result = self.get_cell_vector_from_matrix(result)
-        for i in range(self.size):
-            if self.field[i][column] != result[i]:
-                for j in range(self.size):
-                    self.field[j][column] = deepcopy(result[j])
+    def __solve_visibility_restriction_column(self, column):
+        result = self.__get_possible_columns(column)
+        result = self.__get_right_vector_from_possible(self.__visibility_up[column], self.__visibility_down[column],
+                                                       result)
+        result = self.__get_cell_vector_from_matrix(result)
+        for i in range(self.__size):
+            if self.__field[i][column] != result[i]:
+                for j in range(self.__size):
+                    self.__field[j][column] = deepcopy(result[j])
                 return True
         return False
 
     def solve_by_restrictions(self):
-        self.solve_trivial_highest()
-        self.solve_base_restrictions()
+        self.__solve_trivial_highest()
+        self.__solve_base_restrictions()
 
         while True:
             need_to_bruteforce = True
 
-            for i in range(self.size):
-                for j in range(self.size):
-                    if self.solve_castle_restrictions(i, j):
+            for i in range(self.__size):
+                for j in range(self.__size):
+                    if self.__solve_castle_restrictions(i, j):
                         need_to_bruteforce = False
 
-            for i in range(self.size):
-                if self.solve_only_one_row(i):
+            for i in range(self.__size):
+                if self.__solve_only_one_row(i):
                     need_to_bruteforce = False
-                if self.solve_only_one_column(i):
+                if self.__solve_only_one_column(i):
                     need_to_bruteforce = False
 
-            for i in range(self.size):
-                if self.solve_visibility_restriction_row(i):
+            for i in range(self.__size):
+                if self.__solve_visibility_restriction_row(i):
                     need_to_bruteforce = False
-                if self.solve_visibility_restriction_column(i):
+                if self.__solve_visibility_restriction_column(i):
                     need_to_bruteforce = False
 
             if need_to_bruteforce:
                 break
 
-        print(str(self))
+        return self
 
 
 if __name__ == '__main__':
-    visibility = [[2, 1, 2, 3], [2, 3, 3, 1], [1, 2, 3, 2], [2, 2, 1, 4]]
+    # visibility = [[2, 1, 2, 3], [2, 3, 3, 1], [1, 2, 3, 2], [2, 2, 1, 4]]
     # visibility = [[2, 2, 1, 4], [3, 2, 1, 2], [2, 3, 3, 1], [2, 3, 2, 1]]
+    # visibility = [[1, 3, 3, 2, 2], [1, 4, 2, 3, 2], [3, 1, 2, 2, 2], [2, 2, 1, 3, 3]]
+    visibility = [[2, 1, 3, 3, 2], [2, 3, 1, 3, 3], [2, 2, 1, 2, 3], [4, 1, 4, 2, 2]]
     ss = TowerPuzzle(visibility)
     ss.solve_by_restrictions()
+    print(str(ss))
