@@ -1,4 +1,3 @@
-import sys
 from copy import deepcopy
 
 
@@ -179,6 +178,15 @@ class TowerPuzzle:
                         result[len(result) - 1].remove(i + 1)
         return result
 
+    def get_field_string(self):
+        result = ''
+        for i in range(self.__size):
+            for j in range(self.__size):
+                result += str(int(self.__field[i][j])) + ' '
+            result = result[:-1]
+            result += '\n'
+        return result
+
     def __count_visibility_left(self, index_):
         result = 0
         max_height = 0
@@ -238,7 +246,8 @@ class TowerPuzzle:
             if (self.__visibility_left[i] != self.__count_visibility_left(i)) and (self.__visibility_left[i] != 0):
                 return False
 
-            if (self.__visibility_right[i] != self.__count_visibility_right(i)) and (self.__visibility_right[i] != 0):
+            if (self.__visibility_right[i] != self.__count_visibility_right(i)) and (
+                    self.__visibility_right[i] != 0):
                 return False
 
             if (self.__visibility_up[i] != self.__count_visibility_up(i)) and (self.__visibility_up[i] != 0):
@@ -334,7 +343,8 @@ class TowerPuzzle:
             if count_list[i + 1] == 1:
                 number = i + 1
                 for j in range(self.__size):
-                    if (self.__field[j][column].get_not_zeros().count(number) == 1) and (not self.__field[j][column]):
+                    if (self.__field[j][column].get_not_zeros().count(number) == 1) and (
+                            not self.__field[j][column]):
                         self.__field[j][column].set(number)
                         result = True
                         break
@@ -434,13 +444,3 @@ class TowerPuzzle:
                 break
 
         return self
-
-
-if __name__ == '__main__':
-    # visibility = [[2, 1, 2, 3], [2, 3, 3, 1], [1, 2, 3, 2], [2, 2, 1, 4]]
-    # visibility = [[2, 2, 1, 4], [3, 2, 1, 2], [2, 3, 3, 1], [2, 3, 2, 1]]
-    # visibility = [[1, 3, 3, 2, 2], [1, 4, 2, 3, 2], [3, 1, 2, 2, 2], [2, 2, 1, 3, 3]]
-    visibility = [[2, 1, 3, 3, 2], [2, 3, 1, 3, 3], [2, 2, 1, 2, 3], [4, 1, 4, 2, 2]]
-    ss = TowerPuzzle(visibility)
-    ss.solve()
-    print(str(ss))
