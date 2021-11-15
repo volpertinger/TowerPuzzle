@@ -393,6 +393,17 @@ class TowerPuzzle:
         self.field[row] = deepcopy(result)
         return True
 
+    def solve_visibility_restriction_column(self, column):
+        result = self.get_possible_columns(column)
+        result = self.get_right_vector_from_possible(self.visibility_up[column], self.visibility_down[column], result)
+        result = self.get_cell_vector_from_matrix(result)
+        for i in range(self.size):
+            if self.field[i][column] != result[i]:
+                for j in range(self.size):
+                    self.field[j][column] = deepcopy(result[j])
+                return True
+        return False
+
     def solve_by_restrictions(self):
         self.solve_trivial_highest()
         self.solve_base_restrictions()
@@ -413,7 +424,11 @@ class TowerPuzzle:
                 if self.solve_only_one_column(i):
                     solved_only_one = True
 
-            if (not solved_only_one) or (not solved_castle):
+            for i in range(self.size):
+                if self.solve_visibility_restriction_row(i):
+                    solved_visibility = True
+
+            if (not solved_only_one) or (not solved_castle) or (not solved_visibility):
                 break
 
         print(str(self))
@@ -421,5 +436,6 @@ class TowerPuzzle:
 
 if __name__ == '__main__':
     visibility = [[2, 1, 2, 3], [2, 3, 3, 1], [1, 2, 3, 2], [2, 2, 1, 4]]
+    #visibility = [[2, 2, 1, 4], [3, 2, 1, 2], [2, 3, 3, 1], [2, 3, 2, 1]]
     ss = TowerPuzzle(visibility)
     ss.solve_by_restrictions()
