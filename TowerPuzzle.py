@@ -5,7 +5,7 @@ from copy import deepcopy
 # чтобы составлять поля менее громоздко
 def get_field_from_array(array):
     result = []
-    for i in range(len(array[0])):
+    for i in range(len(array)):
         result.append([])
         for j in range(len(array[0])):
             if array[i][j] == 0:
@@ -129,6 +129,29 @@ class TowerPuzzle:
         # подвал
         result += border
 
+        return result
+
+    @staticmethod
+    def get_right_vector_from_possible(lhs_visibility, rhs_visibility, matrix):
+        result = []
+        for vector in matrix:
+            max_height_lhs = 0
+            max_height_rhs = 0
+            current_lhs_visibility = 0
+            current_rhs_visibility = 0
+            unique_dict = {}
+            for i in range(len(vector)):
+                unique_dict.update({int(vector[i]): True})
+                if int(vector[i]) > max_height_lhs:
+                    current_lhs_visibility += 1
+                    max_height_lhs = int(vector[i])
+                if int(vector[len(vector) - 1 - i]) > max_height_rhs:
+                    current_rhs_visibility += 1
+                    max_height_rhs = int(vector[len(vector) - 1 - i])
+            if ((lhs_visibility == current_lhs_visibility) or (rhs_visibility == 0)) and (
+                    (rhs_visibility == current_rhs_visibility) or (rhs_visibility == 0)) and (
+                    len(unique_dict) == len(vector)):
+                result.append(vector)
         return result
 
     def count_visibility_left(self, index_):

@@ -348,6 +348,45 @@ class Test_TowerPuzzle(unittest.TestCase):
         result = ss.get_possible_columns(1)
         self.assertEqual(ss.get_possible_columns(1), possible_columns)
 
+    def test_get_right_vector_from_possible(self):
+        possible_matrix = [[1, 1, 4, 3], [2, 1, 4, 3], [1, 2, 4, 3], [2, 2, 4, 3]]
+        possible_matrix = get_field_from_array(possible_matrix)
+        right_matrix = [[2, 1, 4, 3], [1, 2, 4, 3]]
+        right_matrix = get_field_from_array(right_matrix)
+
+        self.assertEqual(TowerPuzzle.get_right_vector_from_possible(0, 0, possible_matrix), right_matrix)
+
+        possible_matrix = [[1, 1, 4, 3], [2, 1, 4, 3], [1, 2, 4, 3], [2, 2, 4, 3], [3, 4, 2, 1], [1, 2, 3, 4],
+                           [4, 3, 1, 2]]
+        possible_matrix = get_field_from_array(possible_matrix)
+        right_matrix = [[2, 1, 4, 3], [1, 2, 4, 3], [3, 4, 2, 1], [1, 2, 3, 4], [4, 3, 1, 2]]
+        right_matrix = get_field_from_array(right_matrix)
+
+        self.assertEqual(TowerPuzzle.get_right_vector_from_possible(0, 0, possible_matrix), right_matrix)
+
+        possible_matrix = [[1, 1, 4, 3], [2, 1, 4, 3], [1, 2, 4, 3], [2, 2, 4, 3]]
+        possible_matrix = get_field_from_array(possible_matrix)
+        right_matrix = [[1, 2, 4, 3]]
+        right_matrix = get_field_from_array(right_matrix)
+
+        self.assertEqual(TowerPuzzle.get_right_vector_from_possible(3, 2, possible_matrix), right_matrix)
+
+        possible_matrix = [[1, 1, 4, 3], [2, 1, 4, 3], [1, 2, 4, 3], [2, 2, 4, 3], [3, 4, 2, 1], [1, 2, 3, 4],
+                           [4, 3, 1, 2]]
+        possible_matrix = get_field_from_array(possible_matrix)
+        right_matrix = [[1, 2, 4, 3]]
+        right_matrix = get_field_from_array(right_matrix)
+
+        self.assertEqual(TowerPuzzle.get_right_vector_from_possible(3, 2, possible_matrix), right_matrix)
+
+        possible_matrix = [[1, 1, 4, 3], [2, 1, 4, 3], [1, 2, 4, 3], [2, 2, 4, 3], [3, 4, 2, 1], [1, 2, 3, 4],
+                           [4, 3, 1, 2]]
+        possible_matrix = get_field_from_array(possible_matrix)
+        right_matrix = []
+        right_matrix = get_field_from_array(right_matrix)
+
+        self.assertEqual(TowerPuzzle.get_right_vector_from_possible(2, 1, possible_matrix), right_matrix)
+
 
 class Test_Cell(unittest.TestCase):
 
