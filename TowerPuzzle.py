@@ -145,10 +145,10 @@ class TowerPuzzle:
                     unique_array.append(int(vector[i]))
                 if int(vector[i]) > max_height_lhs:
                     current_lhs_visibility += 1
-                max_height_lhs = int(vector[i])
+                    max_height_lhs = int(vector[i])
                 if int(vector[len(vector) - 1 - i]) > max_height_rhs:
                     current_rhs_visibility += 1
-                max_height_rhs = int(vector[len(vector) - 1 - i])
+                    max_height_rhs = int(vector[len(vector) - 1 - i])
             unique_array.sort()
             if ((lhs_visibility == current_lhs_visibility) or (rhs_visibility == 0)) and (
                     (rhs_visibility == current_rhs_visibility) or (rhs_visibility == 0)) and (
@@ -158,6 +158,8 @@ class TowerPuzzle:
 
     @staticmethod
     def get_cell_vector_from_matrix(matrix):
+        if len(matrix) == 0:
+            return
         length = len(matrix[0])
         unique_vector = []
         for i in range(length):
@@ -343,7 +345,7 @@ class TowerPuzzle:
         for i in range(self.size):
             if self.field[row][i]:
                 for element in result:
-                    element.append(self.field[row][i])
+                    element.append(deepcopy(self.field[row][i]))
             else:
                 numbers = self.field[row][i].get_not_zeros()
                 length = len(result)
@@ -382,8 +384,14 @@ class TowerPuzzle:
                     end += step
         return result
 
-    def solve_visibility_restriction_row(self):
-        return
+    def solve_visibility_restriction_row(self, row):
+        result = self.get_possible_rows(row)
+        result = self.get_right_vector_from_possible(self.visibility_left[row], self.visibility_right[row], result)
+        result = self.get_cell_vector_from_matrix(result)
+        if self.field[row] == result:
+            return False
+        self.field[row] = deepcopy(result)
+        return True
 
     def solve_by_restrictions(self):
         self.solve_trivial_highest()
@@ -392,6 +400,7 @@ class TowerPuzzle:
         while True:
             solved_castle = False
             solved_only_one = False
+            solved_visibility = False
 
             for i in range(self.size):
                 for j in range(self.size):

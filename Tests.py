@@ -1,4 +1,5 @@
 import unittest
+from copy import deepcopy
 from TowerPuzzle import TowerPuzzle
 from TowerPuzzle import get_field_from_array
 
@@ -424,6 +425,31 @@ class Test_TowerPuzzle(unittest.TestCase):
         vector[0][7].remove(9)
 
         self.assertEqual(TowerPuzzle.get_cell_vector_from_matrix(matrix), vector[0])
+
+    def test_solve_visibility_restriction_row(self):
+        visibility = [[2, 2, 1, 4], [3, 2, 1, 2], [2, 3, 3, 1], [2, 3, 2, 1]]
+        field = [[2, 1, 4, 3], [3, 4, 0, 0], [4, 3, 0, 0], [1, 2, 3, 4]]
+        field = get_field_from_array(field)
+        field[1][2].remove(4)
+        field[1][2].remove(3)
+        field[1][3].remove(4)
+        field[1][3].remove(3)
+        field[2][2].remove(4)
+        field[2][2].remove(3)
+        field[2][3].remove(4)
+        field[2][3].remove(3)
+        ss = TowerPuzzle(visibility, deepcopy(field))
+        field[1][2].set(2)
+        field[1][3].set(1)
+
+        ss.solve_visibility_restriction_row(1)
+        self.assertEqual(ss.field, field)
+
+        field[2][2].set(1)
+        field[2][3].set(2)
+
+        ss.solve_visibility_restriction_row(2)
+        self.assertEqual(ss.field, field)
 
 
 class Test_Cell(unittest.TestCase):
