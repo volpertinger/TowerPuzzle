@@ -158,13 +158,24 @@ class TowerPuzzle:
 
     @staticmethod
     def get_cell_vector_from_matrix(matrix):
-        unique_vector = [{}]
-        for i in range(len(matrix[0])):
-            unique_column = {}
+        length = len(matrix[0])
+        unique_vector = []
+        for i in range(length):
+            unique_column = []
             for j in range(len(matrix)):
-                if unique_column.get(i) is None:
-                    unique_column.update({i: True})
-                    continue
+                if unique_column.count(int(matrix[j][i])) == 0:
+                    unique_column.append(int(matrix[j][i]))
+            unique_vector.append(unique_column)
+        result = []
+        for vector in unique_vector:
+            if len(vector) == 1:
+                result.append(TowerPuzzle.Cell(length, vector[0]))
+            else:
+                result.append(TowerPuzzle.Cell(length))
+                for i in range(length):
+                    if vector.count(i + 1) == 0:
+                        result[len(result) - 1].remove(i + 1)
+        return result
 
     def count_visibility_left(self, index_):
         result = 0
