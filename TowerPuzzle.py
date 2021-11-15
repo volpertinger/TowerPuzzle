@@ -416,9 +416,38 @@ class TowerPuzzle:
                 return True
         return False
 
+    def __solve_number_brute_force(self, row=0, column=0, number=1):
+        if number == self.__size + 1:
+            number = 1
+            column += 1
+        # сначала закончим обход начатого ряда
+        for j in range(column, self.__size):
+            if not self.__field[row][j]:
+                numbers = self.__field[row][j].get_not_zeros()
+                for k in range(number, self.__size + 1):
+                    if numbers.count(number) == 1:
+                        self.__field[row][j].set(number)
+                        return True, row, j, number + 1
+
+        for i in range(row + 1, self.__size):
+            for j in range(self.__size):
+                if not self.__field[i][j]:
+                    numbers = self.__field[i][j].get_not_zeros()
+                    for k in range(number, self.__size + 1):
+                        if numbers.count(number) == 1:
+                            self.__field[i][j].set(number)
+                            return True, i, j, number + 1
+
+        return False, 0, 0, 1
+
     def solve(self):
         self.__solve_trivial_highest()
         self.__solve_base_restrictions()
+        # перебор будет использоваться только тогда, когда алгоритмами нельзя никак продвинуть решение
+        brute_force_row_stack = []
+        brute_force_column_stack = []
+        brute_force_number_stack = []
+        brute_force_field_stack = []
 
         while True:
             need_to_bruteforce = True
@@ -441,6 +470,32 @@ class TowerPuzzle:
                     need_to_bruteforce = False
 
             if need_to_bruteforce:
-                break
+                # сюда мы попадаем, когда алгоритмами нельзя продвинуть решение, а это может быть при решенной
+                # головоломке
+                if self.__is_solved():
+                    break
+                if not brute_force_field_stack:
+                    brute_force_result, row, column, number = self.__solve_number_brute_force()
+                    brute_force_field_stack.append(deepcopy(self.__field))
+                    brute_force_row_stack.append(row)
+                    brute_force_column_stack.append(column)
+                    brute_force_number_stack.append(number)
+                else:
+                    last_index = len(brute_force_field_stack) - 1
+                    brute_force_result, row, column, number = self.__solve_number_brute_force(
+                        brute_force_row_stack[last_index], brute_force_column_stack[last_index],
+                        brute_force_number_stack[last_index])
+                    brute_force_field_stack.append(deepcopy(self.__field))
+                    brute_force_row_stack.append(row)
+                    brute_force_column_stack.append(column)
+                    brute_force_number_stack.append(number)
+                if not brute_force_result:
+                    if not brute_force_field_stack:
+                        break
+                    else:
+                        self.__field = deepcopy(brute_force_field_stack.pop())
+                        brute_force_row_stack.pop()
+                        brute_force_column_stack.pop()
+                        brute_force_number_stack.pop()
 
         return self
