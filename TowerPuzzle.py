@@ -406,7 +406,7 @@ class TowerPuzzle:
                 return True
         return False
 
-    def solve_by_restrictions(self):
+    def solve(self):
         self.__solve_trivial_highest()
         self.__solve_base_restrictions()
 
@@ -442,5 +442,5 @@ if __name__ == '__main__':
     # visibility = [[1, 3, 3, 2, 2], [1, 4, 2, 3, 2], [3, 1, 2, 2, 2], [2, 2, 1, 3, 3]]
     visibility = [[2, 1, 3, 3, 2], [2, 3, 1, 3, 3], [2, 2, 1, 2, 3], [4, 1, 4, 2, 2]]
     ss = TowerPuzzle(visibility)
-    ss.solve_by_restrictions()
+    ss.solve()
     print(str(ss))
