@@ -149,7 +149,7 @@ class TowerPuzzle:
                     current_rhs_visibility += 1
                     max_height_rhs = int(vector[len(vector) - 1 - i])
             unique_array.sort()
-            if ((lhs_visibility == current_lhs_visibility) or (rhs_visibility == 0)) and (
+            if ((lhs_visibility == current_lhs_visibility) or (lhs_visibility == 0)) and (
                     (rhs_visibility == current_rhs_visibility) or (rhs_visibility == 0)) and (
                     len(unique_array) == len(vector)):
                 result.append(vector)
@@ -438,7 +438,7 @@ class TowerPuzzle:
                             self.__field[i][j].set(number)
                             return True, i, j, number + 1
 
-        return False, 0, 0, 1
+        return False, None, None, None
 
     def solve(self):
         self.__solve_trivial_highest()
@@ -490,6 +490,12 @@ class TowerPuzzle:
                     brute_force_column_stack.append(column)
                     brute_force_number_stack.append(number)
                 if not brute_force_result:
+                    # удаляем None нв вершинах стеков
+                    brute_force_row_stack.pop()
+                    brute_force_column_stack.pop()
+                    brute_force_number_stack.pop()
+                    # и поле тупиковое удалим
+                    brute_force_field_stack.pop()
                     if not brute_force_field_stack:
                         break
                     else:

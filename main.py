@@ -48,6 +48,7 @@ if __name__ == '__main__':
 
     if field:
         tower_puzzle = TowerPuzzle(visibility, field)
+        # print(str(tower_puzzle))
         tower_puzzle.solve()
         output = open(output_name, 'w')
         output.write(tower_puzzle.get_field_string())
