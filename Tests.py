@@ -682,3 +682,66 @@ class Test_Cell(unittest.TestCase):
         cell.remove(1)
         cell.remove(2)
         self.assertTrue(cell)
+
+
+class Test_text(unittest.TestCase):
+
+    def test_all(self):
+        directory = "Tests/"
+        input_prefix = "input"
+        output_prefix = "output"
+        for j in range(1, 14):
+            input_name = directory + input_prefix + str(int(j / 10)) + str(j % 10)
+            output_name = directory + output_prefix + str(int(j / 10)) + str(j % 10)
+            input_file = open(input_name)
+            size = int(input_file.readline()[:-1])
+            visibility = []
+            input_file.readline()
+            for i in range(4):
+                split_array = input_file.readline()[:-1].split(' ')
+                if len(split_array) == 0:
+                    i -= 1
+                    continue
+                row = []
+                if split_array == ['']:
+                    raise RuntimeError("Wrong input: empty string")
+                for number in split_array:
+                    row.append(int(number))
+                visibility.append(row)
+
+            field = []
+            input_file.readline()
+
+            for i in range(size):
+                split_array = input_file.readline()[:-1].split(' ')
+                row = []
+                if split_array == [''] and field != []:
+                    raise RuntimeError("Wrong input: empty string")
+                if split_array == ['']:
+                    break
+                for number in split_array:
+                    row.append(int(number))
+                field.append(row)
+
+            input_file.close()
+            field = TowerPuzzle.get_field_from_array(field)
+
+            if field:
+                tower_puzzle = TowerPuzzle(visibility, field)
+                tower_puzzle.solve()
+                output = open(output_name)
+                answer = ''
+                for line in output.readlines():
+                    answer += line
+                output.close()
+                self.assertEqual(tower_puzzle.get_field_string(), answer)
+
+            else:
+                tower_puzzle = TowerPuzzle(visibility)
+                tower_puzzle.solve()
+                output = open(output_name)
+                answer = ''
+                for line in output.readlines():
+                    answer += line
+                output.close()
+                self.assertEqual(tower_puzzle.get_field_string(), answer)
