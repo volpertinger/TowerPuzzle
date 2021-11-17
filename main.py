@@ -25,6 +25,7 @@ if __name__ == '__main__':
 
     field = []
     input_file.readline()
+
     for i in range(size):
         split_array = input_file.readline()[:-1].split(' ')
         row = []

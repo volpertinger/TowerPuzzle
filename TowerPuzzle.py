@@ -516,10 +516,12 @@ class TowerPuzzle:
             while result:
                 result = False
                 for i in range(self.__size):
-                    if self.__solve_visibility_restriction_row(i):
-                        result = True
-                    if self.__solve_visibility_restriction_column(i):
-                        result = True
+                    if (self.__visibility_right[i] != 0) and (self.__visibility_left[i] != 0):
+                        if self.__solve_visibility_restriction_row(i):
+                            result = True
+                    if (self.__visibility_up[i] != 0) and (self.__visibility_down[i] != 0):
+                        if self.__solve_visibility_restriction_column(i):
+                            result = True
                 if result:
                     break
         return self.__is_solved()
@@ -532,7 +534,6 @@ class TowerPuzzle:
         while True:
             if self.__solve_by_restrictions():
                 break
-
             result_brute_force = False
             while not result_brute_force:
                 if self.__count_brute_force_variants() is None:
@@ -551,7 +552,7 @@ class TowerPuzzle:
                     brute_force_variants.append(0)
                     if self.__is_solved():
                         return True
-                    continue
+                    break
 
                 while (not self.__is_correct()) or (
                         self.__count_brute_force_variants() < brute_force_variants[len(brute_force_variants) - 1]):
@@ -559,7 +560,6 @@ class TowerPuzzle:
                         return False
                     self.__field = deepcopy(brute_force_fields.pop())
                     brute_force_variants.pop()
-                continue
 
             if self.__is_solved():
                 return True
