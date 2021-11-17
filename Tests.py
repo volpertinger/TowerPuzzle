@@ -526,6 +526,43 @@ class Test_TowerPuzzle(unittest.TestCase):
         self.assertEqual(ss._TowerPuzzle__field, field)
 
     def test_brute_force(self):
+        visibility = [[0, 0], [0, 0], [0, 0], [0, 0]]
+        ss = TowerPuzzle(visibility)
+        ss.solve()
+        field = [[1, 2], [2, 1]]
+        field = TowerPuzzle.get_field_from_array(field)
+        self.assertEqual(ss._TowerPuzzle__field, field)
+
+        visibility = [[0, 0], [1, 0], [0, 0], [0, 0]]
+        ss = TowerPuzzle(visibility)
+        ss.solve()
+        field = [[2, 1], [1, 2]]
+        field = TowerPuzzle.get_field_from_array(field)
+        self.assertEqual(ss._TowerPuzzle__field, field)
+
+        visibility = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        ss = TowerPuzzle(visibility)
+        ss.solve()
+        field = [[1, 2, 3], [2, 3, 1], [3, 1, 2]]
+        field = TowerPuzzle.get_field_from_array(field)
+        self.assertEqual(ss._TowerPuzzle__field, field)
+
+        visibility = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+        ss = TowerPuzzle(visibility)
+        ss.solve()
+        field = [[1, 2, 3, 4], [2, 1, 4, 3], [3, 4, 1, 2], [4, 3, 2, 1]]
+        field = TowerPuzzle.get_field_from_array(field)
+        self.assertEqual(ss._TowerPuzzle__field, field)
+
+        visibility = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        field = [[0, 0, 0], [0, 2, 0], [0, 0, 0]]
+        field = TowerPuzzle.get_field_from_array(field)
+        ss = TowerPuzzle(visibility, deepcopy(field))
+        ss.solve()
+        field = [[1, 3, 2], [3, 2, 1], [2, 1, 3]]
+        field = TowerPuzzle.get_field_from_array(field)
+        self.assertEqual(ss._TowerPuzzle__field, field)
+
         visibility = [[0, 2, 0, 0], [0, 0, 0, 3], [0, 0, 0, 0], [0, 0, 2, 0]]
         field = [[0, 0, 0, 0], [0, 0, 0, 0], [2, 0, 0, 0], [0, 0, 0, 2]]
         field = TowerPuzzle.get_field_from_array(field)
@@ -539,8 +576,8 @@ class Test_TowerPuzzle(unittest.TestCase):
         ss = TowerPuzzle(visibility)
         field = [[1, 3, 4, 2], [2, 1, 3, 4], [4, 2, 1, 3], [3, 4, 2, 1]]
         field = TowerPuzzle.get_field_from_array(field)
-        #ss.solve()
-        #self.assertEqual(ss._TowerPuzzle__field, field)
+        ss.solve()
+        self.assertEqual(ss._TowerPuzzle__field, field)
 
 
 class Test_Cell(unittest.TestCase):

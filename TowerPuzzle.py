@@ -237,6 +237,15 @@ class TowerPuzzle:
                 result += 1
         return result
 
+    def __count_brute_force_variants(self):
+        # result = 1
+        for i in range(self.__size):
+            for j in range(self.__size):
+                # result *= len(self.__field[i][j].get_not_zeros())
+                if len(self.__field[i][j].get_not_zeros()) > 1:
+                    return len(self.__field[i][j].get_not_zeros()) - 1
+                    # return result
+
     def __is_unique_row(self, row):
         unique_stack = []
         for i in range(self.__size):
@@ -251,7 +260,7 @@ class TowerPuzzle:
         for i in range(self.__size):
             if unique_stack.count(int(self.__field[i][column])) == 1:
                 return False
-            if (unique_stack.count(int(self.__field[i][column]))) and (int(self.__field[i][column]) != 0):
+            if (unique_stack.count(int(self.__field[i][column])) == 0) and (int(self.__field[i][column]) != 0):
                 unique_stack.append(int(self.__field[i][column]))
         return True
 
@@ -277,6 +286,26 @@ class TowerPuzzle:
                 return False
             if not self.__is_unique_column(i):
                 return False
+
+        return True
+
+    def __is_correct(self):
+        for i in range(self.__size):
+            if not self.__is_unique_row(i):
+                return False
+            if not self.__is_unique_column(i):
+                return False
+            if self.__count_unfilled_cells_vertical(i) == 0:
+                if (self.__count_visibility_up(i) != self.__visibility_up[i]) and (self.__visibility_up[i] != 0):
+                    return False
+                if (self.__count_visibility_down(i) != self.__visibility_down[i]) and (self.__visibility_down[i] != 0):
+                    return False
+            if self.__count_unfilled_cells_horizontal(i) == 0:
+                if (self.__count_visibility_left(i) != self.__visibility_left[i]) and (self.__visibility_left[i] != 0):
+                    return False
+                if (self.__count_visibility_right(i) != self.__visibility_right[i]) and (
+                        self.__visibility_right[i] != 0):
+                    return False
 
         return True
 
@@ -450,9 +479,9 @@ class TowerPuzzle:
                     for number in self.__field[i][j].get_not_zeros():
                         if variant_counter == variant:
                             self.__field[i][j].set(number)
-                            return True, variant + 1
+                            return True
                         variant_counter += 1
-        return False, variant + 1
+        return False
 
     def __solve_trivial_cases(self):
         self.__solve_trivial_highest()
@@ -496,9 +525,43 @@ class TowerPuzzle:
         return self.__is_solved()
 
     def solve(self):
-        self.__solve_trivial_cases()
+        # self.__solve_trivial_cases()
+        brute_force_fields = []
+        # variant - это позиция, с которой нужно начать перебор, если прошлая ведет в тупик
+        brute_force_variants = [0]
         while True:
-            if self.__solve_by_restrictions():
-                break
-            self.__solve_number_brute_force()
-        return self.__is_solved()
+            # if self.__solve_by_restrictions():
+            # break
+            if (int(self.__field[0][0]) == 3) and (int(self.__field[2][3]) == 4) and (
+            (int(self.__field[3][0]) == 4)) and (int(self.__field[3][1]) == 1) and (int(self.__field[3][2]) == 2):
+                print()
+            result_brute_force = False
+            while not result_brute_force:
+                if self.__count_brute_force_variants() is None:
+                    if len(brute_force_fields) == 0:
+                        return False
+                    brute_force_variants.pop()
+                    self.__field = deepcopy(brute_force_fields.pop())
+                    continue
+
+                if (self.__is_correct()) and (
+                        self.__count_brute_force_variants() >= brute_force_variants[len(brute_force_variants) - 1]):
+                    brute_force_fields.append(deepcopy(self.__field))
+                    result_brute_force = self.__solve_number_brute_force(
+                        brute_force_variants[len(brute_force_variants) - 1])
+                    brute_force_variants[len(brute_force_variants) - 1] += 1
+                    brute_force_variants.append(0)
+                    if self.__is_solved():
+                        return True
+                    continue
+                while (not self.__is_correct()) or (
+                        self.__count_brute_force_variants() < brute_force_variants[len(brute_force_variants) - 1]):
+                    if (len(brute_force_fields) == 0) or (len(brute_force_variants) == 0):
+                        return False
+                    self.__field = deepcopy(brute_force_fields.pop())
+                    brute_force_variants.pop()
+                continue
+
+            if self.__is_solved():
+                return True
+            # return True
