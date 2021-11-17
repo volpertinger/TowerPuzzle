@@ -240,19 +240,19 @@ class TowerPuzzle:
     def __is_unique_row(self, row):
         unique_stack = []
         for i in range(self.__size):
-            if (unique_stack.count(int(self.__field[row][i])) == 0) and (int(self.__field[row][i]) != 0):
-                unique_stack.append(int(self.__field[row][i]))
             if unique_stack.count(int(self.__field[row][i])) == 1:
                 return False
+            if (unique_stack.count(int(self.__field[row][i])) == 0) and (int(self.__field[row][i]) != 0):
+                unique_stack.append(int(self.__field[row][i]))
         return True
 
     def __is_unique_column(self, column):
         unique_stack = []
         for i in range(self.__size):
-            if (unique_stack.count(int(self.__field[i][column]))) and (int(self.__field[i][column]) != 0):
-                unique_stack.append(int(self.__field[i][column]))
             if unique_stack.count(int(self.__field[i][column])) == 1:
                 return False
+            if (unique_stack.count(int(self.__field[i][column]))) and (int(self.__field[i][column]) != 0):
+                unique_stack.append(int(self.__field[i][column]))
         return True
 
     def __is_solved(self):
@@ -452,65 +452,53 @@ class TowerPuzzle:
                             self.__field[i][j].set(number)
                             return True, variant + 1
                         variant_counter += 1
-        return False, variant
+        return False, variant + 1
 
-    def solve(self):
+    def __solve_trivial_cases(self):
         self.__solve_trivial_highest()
         self.__solve_base_restrictions()
-        # перебор будет использоваться только тогда, когда алгоритмами нельзя никак продвинуть решение
-        bruteforce_field_stack = []
-        bruteforce_variant_stack = [0]
 
-        while True:
-            need_to_bruteforce = True
+    def __solve_by_restrictions(self):
+        result = True
+        while result:
 
-            for i in range(self.__size):
-                for j in range(self.__size):
-                    if self.__solve_castle_restrictions(i, j):
-                        need_to_bruteforce = False
+            while result:
+                result = False
+                for i in range(self.__size):
+                    for j in range(self.__size):
+                        if self.__solve_castle_restrictions(i, j):
+                            result = True
 
-            for i in range(self.__size):
-                if self.__solve_only_one_row(i):
-                    need_to_bruteforce = False
-                if self.__solve_only_one_column(i):
-                    need_to_bruteforce = False
-
-            for i in range(self.__size):
-                if self.__solve_visibility_restriction_row(i):
-                    need_to_bruteforce = False
-                if self.__solve_visibility_restriction_column(i):
-                    need_to_bruteforce = False
-
-            if need_to_bruteforce:
-                if self.__is_solved():
+            result = True
+            while result:
+                result = False
+                for i in range(self.__size):
+                    if self.__solve_only_one_row(i):
+                        result = True
+                    if self.__solve_only_one_column(i):
+                        result = True
+                # каскад из условий, чтобы при успехе вернуться у первому циклу, которым решать наиболее эффективно
+                if result:
                     break
-                result_brute_force, variant = self.__solve_number_brute_force()
-                if result_brute_force:
-                    bruteforce_field_stack.append(deepcopy(self.__field))
-                    bruteforce_variant_stack.append(variant)
-                    continue
-                while (not result_brute_force) and (len(bruteforce_field_stack) > 0):
-                    while variant < self.__size * self.__size * self.__size:
-                        result_brute_force, variant = self.__solve_number_brute_force(variant)
-                        if result_brute_force:
-                            break
-                        self.__field = bruteforce_field_stack[len(bruteforce_field_stack) - 1]
-                    self.__field = deepcopy(bruteforce_field_stack.pop())
-                if result_brute_force:
-                    bruteforce_field_stack.append(deepcopy(self.__field))
-                    bruteforce_variant_stack.append(variant)
-                    continue
-                variant = 0
-                field = deepcopy(self.__field)
-                while variant < self.__size * self.__size * self.__size:
-                    result_brute_force, variant = self.__solve_number_brute_force(variant)
-                    if result_brute_force:
-                        break
-                    self.__field = bruteforce_field_stack[deepcopy(field)]
-                if result_brute_force:
-                    bruteforce_field_stack.append(deepcopy(self.__field))
-                    bruteforce_variant_stack.append(variant)
-                    continue
-                break
+            if result:
+                continue
 
-        return self
+            result = True
+            while result:
+                result = False
+                for i in range(self.__size):
+                    if self.__solve_visibility_restriction_row(i):
+                        result = True
+                    if self.__solve_visibility_restriction_column(i):
+                        result = True
+                if result:
+                    break
+        return self.__is_solved()
+
+    def solve(self):
+        self.__solve_trivial_cases()
+        while True:
+            if self.__solve_by_restrictions():
+                break
+            self.__solve_number_brute_force()
+        return self.__is_solved()
