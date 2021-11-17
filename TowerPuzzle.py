@@ -525,16 +525,14 @@ class TowerPuzzle:
         return self.__is_solved()
 
     def solve(self):
-        # self.__solve_trivial_cases()
+        self.__solve_trivial_cases()
         brute_force_fields = []
         # variant - это позиция, с которой нужно начать перебор, если прошлая ведет в тупик
         brute_force_variants = [0]
         while True:
-            # if self.__solve_by_restrictions():
-            # break
-            if (int(self.__field[0][0]) == 3) and (int(self.__field[2][3]) == 4) and (
-            (int(self.__field[3][0]) == 4)) and (int(self.__field[3][1]) == 1) and (int(self.__field[3][2]) == 2):
-                print()
+            if self.__solve_by_restrictions():
+                break
+
             result_brute_force = False
             while not result_brute_force:
                 if self.__count_brute_force_variants() is None:
@@ -554,6 +552,7 @@ class TowerPuzzle:
                     if self.__is_solved():
                         return True
                     continue
+
                 while (not self.__is_correct()) or (
                         self.__count_brute_force_variants() < brute_force_variants[len(brute_force_variants) - 1]):
                     if (len(brute_force_fields) == 0) or (len(brute_force_variants) == 0):
@@ -564,4 +563,4 @@ class TowerPuzzle:
 
             if self.__is_solved():
                 return True
-            # return True
+        return False
