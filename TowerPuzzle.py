@@ -564,3 +564,37 @@ class TowerPuzzle:
             if self.__is_solved():
                 return True
         return False
+
+    def solve_by_brute_force(self):
+        brute_force_fields = []
+        brute_force_variants = [0]
+        while True:
+            result_brute_force = False
+            while not result_brute_force:
+                if self.__count_brute_force_variants() is None:
+                    if len(brute_force_fields) == 0:
+                        return False
+                    brute_force_variants.pop()
+                    self.__field = deepcopy(brute_force_fields.pop())
+                    continue
+
+                if (self.__is_correct()) and (
+                        self.__count_brute_force_variants() >= brute_force_variants[len(brute_force_variants) - 1]):
+                    brute_force_fields.append(deepcopy(self.__field))
+                    result_brute_force = self.__solve_number_brute_force(
+                        brute_force_variants[len(brute_force_variants) - 1])
+                    brute_force_variants[len(brute_force_variants) - 1] += 1
+                    brute_force_variants.append(0)
+                    if self.__is_solved():
+                        return True
+                    break
+
+                while (not self.__is_correct()) or (
+                        self.__count_brute_force_variants() < brute_force_variants[len(brute_force_variants) - 1]):
+                    if (len(brute_force_fields) == 0) or (len(brute_force_variants) == 0):
+                        return False
+                    self.__field = deepcopy(brute_force_fields.pop())
+                    brute_force_variants.pop()
+
+            if self.__is_solved():
+                return True

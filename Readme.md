@@ -7,3 +7,5 @@
 [Тесты](tests.md)
 
 [Запуск программы](launching.md)
+
+[Замеры производительности](productivity.md)

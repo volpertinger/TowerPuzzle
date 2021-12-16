@@ -797,3 +797,201 @@ class Test_text(unittest.TestCase):
     def test_13(self, i=13):
         result, answer = self.get_result(i)
         self.assertEqual(result, answer)
+
+
+class Test_productivity(unittest.TestCase):
+
+    @staticmethod
+    def get_result(i):
+        directory = "Tests/Productivity_tests/"
+        input_prefix = "input"
+        output_prefix = "output"
+        input_name = directory + input_prefix + str(int(i / 10)) + str(i % 10)
+        output_name = directory + output_prefix + str(int(i / 10)) + str(i % 10)
+        input_file = open(input_name)
+        size = int(input_file.readline()[:-1])
+        visibility = []
+        input_file.readline()
+        for i in range(4):
+            split_array = input_file.readline()[:-1].split(' ')
+            if len(split_array) == 0:
+                i -= 1
+                continue
+            row = []
+            if split_array == ['']:
+                raise RuntimeError("Wrong input: empty string")
+            for number in split_array:
+                row.append(int(number))
+            visibility.append(row)
+
+        field = []
+        input_file.readline()
+
+        for i in range(size):
+            split_array = input_file.readline()[:-1].split(' ')
+            row = []
+            if split_array == [''] and field != []:
+                raise RuntimeError("Wrong input: empty string")
+            if split_array == ['']:
+                break
+            for number in split_array:
+                row.append(int(number))
+            field.append(row)
+
+        input_file.close()
+        field = TowerPuzzle.get_field_from_array(field)
+
+        if field:
+            tower_puzzle = TowerPuzzle(visibility, field)
+            tower_puzzle.solve()
+            output = open(output_name)
+            answer = ''
+            for line in output.readlines():
+                answer += line
+            output.close()
+            return tower_puzzle.get_field_string(), answer
+
+        else:
+            tower_puzzle = TowerPuzzle(visibility)
+            tower_puzzle.solve()
+            output = open(output_name)
+            answer = ''
+            for line in output.readlines():
+                answer += line
+            output.close()
+            return tower_puzzle.get_field_string(), answer
+
+    @staticmethod
+    def get_result_brute_force(i):
+        directory = "Tests/Productivity_tests/"
+        input_prefix = "input"
+        output_prefix = "output"
+        input_name = directory + input_prefix + str(int(i / 10)) + str(i % 10)
+        output_name = directory + output_prefix + str(int(i / 10)) + str(i % 10)
+        input_file = open(input_name)
+        size = int(input_file.readline()[:-1])
+        visibility = []
+        input_file.readline()
+        for i in range(4):
+            split_array = input_file.readline()[:-1].split(' ')
+            if len(split_array) == 0:
+                i -= 1
+                continue
+            row = []
+            if split_array == ['']:
+                raise RuntimeError("Wrong input: empty string")
+            for number in split_array:
+                row.append(int(number))
+            visibility.append(row)
+
+        field = []
+        input_file.readline()
+
+        for i in range(size):
+            split_array = input_file.readline()[:-1].split(' ')
+            row = []
+            if split_array == [''] and field != []:
+                raise RuntimeError("Wrong input: empty string")
+            if split_array == ['']:
+                break
+            for number in split_array:
+                row.append(int(number))
+            field.append(row)
+
+        input_file.close()
+        field = TowerPuzzle.get_field_from_array(field)
+
+        if field:
+            tower_puzzle = TowerPuzzle(visibility, field)
+            tower_puzzle.solve_by_brute_force()
+            output = open(output_name)
+            answer = ''
+            for line in output.readlines():
+                answer += line
+            output.close()
+            return tower_puzzle.get_field_string(), answer
+
+        else:
+            tower_puzzle = TowerPuzzle(visibility)
+            tower_puzzle.solve_by_brute_force()
+            output = open(output_name)
+            answer = ''
+            for line in output.readlines():
+                answer += line
+            output.close()
+            return tower_puzzle.get_field_string(), answer
+
+    def test_1(self, i=1):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_1_b(self, i=1):
+        result, answer = self.get_result_brute_force(i)
+        self.assertEqual(result, answer)
+
+    def test_2(self, i=2):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_2_b(self, i=2):
+        result, answer = self.get_result_brute_force(i)
+        self.assertEqual(result, answer)
+
+    def test_3(self, i=3):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_3_b(self, i=3):
+        result, answer = self.get_result_brute_force(i)
+        self.assertEqual(result, answer)
+
+    def test_4(self, i=4):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_4_b(self, i=4):
+        result, answer = self.get_result_brute_force(i)
+        self.assertEqual(result, answer)
+
+    def test_5(self, i=5):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_5_b(self, i=5):
+        result, answer = self.get_result_brute_force(i)
+        self.assertEqual(result, answer)
+
+    def test_6(self, i=6):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_6_b(self, i=6):
+        result, answer = self.get_result_brute_force(i)
+        self.assertEqual(result, answer)
+
+    def test_7(self, i=7):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_7_b(self, i=7):
+        result, answer = self.get_result_brute_force(i)
+        self.assertEqual(result, answer)
+
+    def test_8(self, i=8):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_8_b(self, i=8):
+        result, answer = self.get_result_brute_force(i)
+        self.assertEqual(result, answer)
+
+    def test_9(self, i=9):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_9_b(self, i=9):
+        result, answer = self.get_result_brute_force(i)
+        self.assertEqual(result, answer)
+
+
+
