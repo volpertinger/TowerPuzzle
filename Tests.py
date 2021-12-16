@@ -686,62 +686,114 @@ class Test_Cell(unittest.TestCase):
 
 class Test_text(unittest.TestCase):
 
-    def test_all(self):
+    @staticmethod
+    def get_result(i):
         directory = "Tests/"
         input_prefix = "input"
         output_prefix = "output"
-        for j in range(1, 14):
-            input_name = directory + input_prefix + str(int(j / 10)) + str(j % 10)
-            output_name = directory + output_prefix + str(int(j / 10)) + str(j % 10)
-            input_file = open(input_name)
-            size = int(input_file.readline()[:-1])
-            visibility = []
-            input_file.readline()
-            for i in range(4):
-                split_array = input_file.readline()[:-1].split(' ')
-                if len(split_array) == 0:
-                    i -= 1
-                    continue
-                row = []
-                if split_array == ['']:
-                    raise RuntimeError("Wrong input: empty string")
-                for number in split_array:
-                    row.append(int(number))
-                visibility.append(row)
+        input_name = directory + input_prefix + str(int(i / 10)) + str(i % 10)
+        output_name = directory + output_prefix + str(int(i / 10)) + str(i % 10)
+        input_file = open(input_name)
+        size = int(input_file.readline()[:-1])
+        visibility = []
+        input_file.readline()
+        for i in range(4):
+            split_array = input_file.readline()[:-1].split(' ')
+            if len(split_array) == 0:
+                i -= 1
+                continue
+            row = []
+            if split_array == ['']:
+                raise RuntimeError("Wrong input: empty string")
+            for number in split_array:
+                row.append(int(number))
+            visibility.append(row)
 
-            field = []
-            input_file.readline()
+        field = []
+        input_file.readline()
 
-            for i in range(size):
-                split_array = input_file.readline()[:-1].split(' ')
-                row = []
-                if split_array == [''] and field != []:
-                    raise RuntimeError("Wrong input: empty string")
-                if split_array == ['']:
-                    break
-                for number in split_array:
-                    row.append(int(number))
-                field.append(row)
+        for i in range(size):
+            split_array = input_file.readline()[:-1].split(' ')
+            row = []
+            if split_array == [''] and field != []:
+                raise RuntimeError("Wrong input: empty string")
+            if split_array == ['']:
+                break
+            for number in split_array:
+                row.append(int(number))
+            field.append(row)
 
-            input_file.close()
-            field = TowerPuzzle.get_field_from_array(field)
+        input_file.close()
+        field = TowerPuzzle.get_field_from_array(field)
 
-            if field:
-                tower_puzzle = TowerPuzzle(visibility, field)
-                tower_puzzle.solve()
-                output = open(output_name)
-                answer = ''
-                for line in output.readlines():
-                    answer += line
-                output.close()
-                self.assertEqual(tower_puzzle.get_field_string(), answer)
+        if field:
+            tower_puzzle = TowerPuzzle(visibility, field)
+            tower_puzzle.solve()
+            output = open(output_name)
+            answer = ''
+            for line in output.readlines():
+                answer += line
+            output.close()
+            return tower_puzzle.get_field_string(), answer
 
-            else:
-                tower_puzzle = TowerPuzzle(visibility)
-                tower_puzzle.solve()
-                output = open(output_name)
-                answer = ''
-                for line in output.readlines():
-                    answer += line
-                output.close()
-                self.assertEqual(tower_puzzle.get_field_string(), answer)
+        else:
+            tower_puzzle = TowerPuzzle(visibility)
+            tower_puzzle.solve()
+            output = open(output_name)
+            answer = ''
+            for line in output.readlines():
+                answer += line
+            output.close()
+            return tower_puzzle.get_field_string(), answer
+
+    def test_1(self, i=1):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_2(self, i=2):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_3(self, i=3):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_4(self, i=4):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_5(self, i=5):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_6(self, i=6):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_7(self, i=7):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_8(self, i=8):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_9(self, i=9):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_10(self, i=10):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_11(self, i=11):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_12(self, i=12):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
+
+    def test_13(self, i=13):
+        result, answer = self.get_result(i)
+        self.assertEqual(result, answer)
